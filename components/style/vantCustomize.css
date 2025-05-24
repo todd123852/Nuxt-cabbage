@@ -1,0 +1,27 @@
+
+:root {
+    --primary: #D1AE52;
+    --lead: #E3E3E3;
+    --neutral_1: #999999;
+    --neutral_2:#666666;
+    --neutral_3:#666666;
+    --border: #333333;
+    --bg_1: #0A0A0A;
+    --bg_2: #1A1A1A;
+    --accent_1: #04BE02;
+    --accent_2: #EA4E3D;
+    --accent_3: #FFAA09;
+    --leftnav_active:#999999;
+    --text_primary: #D1AE52;
+    --text_accent3: #703904;
+    --home_bg: #1A1A1A;
+}
+:root:root {
+    --van-popup-close-icon-margin: 1rem;
+}
+button {
+    background-color: var(--text_primary);
+}
+.app-container .van-icon-arrow-left {
+    font-size: 1.3rem;
+}
