@@ -1,8 +1,6 @@
 <template>
   <div class="home-content">
     <div class="home-page" ref="page">
-      <header>
-      </header>
       <section>
         <div class="section-content">
           <Banner />
@@ -15,10 +13,13 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { useLayoutTransition } from '@/composable/usePageTransition';
+const route = useRoute();
+
   definePageMeta({
-    layoutTransition:{
-      name: 'layout-left',
-    },
+    layout: 'default',
+    layoutTransition: useLayoutTransition(),
   })
   useSeoMeta({
     title: '厚的首页',
@@ -33,5 +34,10 @@
   }
   .home-page {
     height: 100%;
+  }
+  @media (width <= 450px) {
+    .section-content {
+      padding: 0 2.5vw;
+    }
   }
 </style>

@@ -1,42 +1,56 @@
 <template>
-    <div>
-        <div class="myInfo">
-            <section>
-                <header>
-                    <div class="header-item">
-                        <van-icon name="arrow-left" />
-                        <div class="head-nav">
-                            <div class="btnContainer" 
-                            v-for="item in headerItem" :key="item.icon">
-                                <div class="icon-box">
-                                    <van-icon :name="item.icon" :badge="item.badge" />
-                                </div>
-                                <p>{{ item.name }}</p>
+    <div class="myInfo">
+        <section>
+            <header>
+                <div class="header-item">
+                    <van-icon name="arrow-left" />
+                    <div class="head-nav">
+                        <div class="btnContainer" 
+                        v-for="item in headerItem" :key="item.icon">
+                            <div class="icon-box">
+                                <van-icon :name="item.icon" :badge="item.badge" />
                             </div>
+                            <p>{{ item.name }}</p>
                         </div>
                     </div>
-                    <div class="memberInfo">
-                        <div class="avator">图</div>
-                    </div>
-                </header>
-                <main>
-                    <div class="navCardContainer">
-                        <nav>提现</nav>
-                        <nav>充值</nav>
-                        <nav>利息宝</nav>
-                        <nav>公积金</nav>
-                    </div>
-                    <div class="vipContainer">
-                        <div class="vipHead"></div>
-                        <div class="vipProcess"></div>
-                    </div>
-                    <div class="menuList"></div>
-                </main>
-            </section>
-        </div>
+                </div>
+                <div class="memberInfo">
+                    <div class="avator">图</div>
+                </div>
+            </header>
+            <main>
+                <div class="navCardContainer">
+                    <nav>提现</nav>
+                    <nav>充值</nav>
+                    <nav>利息宝</nav>
+                    <nav>公积金</nav>
+                </div>
+                <div class="vipContainer">
+                    <div class="vipHead"></div>
+                    <div class="vipProcess"></div>
+                </div>
+                <div class="menuList">
+                    <van-cell
+                    v-for="li in menu" :key="li.name"
+                    id="menu-list"
+                    :border="false"
+                    :title="li.name" 
+                    icon="location-o" 
+                    arrow-direction="right"
+                    is-link
+                    >{{  }}</van-cell>
+                </div>
+            </main>
+        </section>
     </div>
 </template>
 <script setup lang="ts">
+import { useLayoutTransition } from '@/composable/usePageTransition';
+
+  definePageMeta({
+    layout: 'mine',
+    layoutTransition: useLayoutTransition()
+  })
     const headerItem = [
         {name:'客服', icon:'service', badge: '2'},
         {name:'消息中心', icon:'chat-o', badge: '99+'},
@@ -61,15 +75,8 @@
         {name: '关于我们', to: ''},
         {name: '安全退出', to: ''},
     ])
-    definePageMeta({
-        layoutTransition:{
-            name: 'layout-left',
-        },
-        layout: 'mine'
-    })
 </script>
 <style scoped>
-    
     .myInfo {
         width: 100%;
         height: 100vh;
@@ -80,6 +87,7 @@
         background-color: aqua;
         display: flex;
         flex-direction: column;
+        position: relative;
     }
     .header-item .van-icon-arrow-left {
         position: absolute;
@@ -89,7 +97,6 @@
     }
     main {
         width: 100%;
-        height: 8vh;
     }
     .header-item {
         flex: 1;
@@ -117,7 +124,8 @@
         background-color: rgb(126, 197, 135);
     }
     .menuList {
-        background-color: rgb(204, 160, 167);
+        background-color: rgb(233, 24, 59);
+        color: var(--lead);
     }
     .btnContainer, .icon-box {
         display: flex;

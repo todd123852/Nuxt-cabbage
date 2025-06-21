@@ -17,11 +17,97 @@
     --home_bg: #1A1A1A;
 }
 :root:root {
+    --van-popup-round-radius: 3%;
     --van-popup-close-icon-margin: 1rem;
+    --van-tabs-line-height: 2.5rem;
+    --van-tabs-bottom-bar-height:.2rem;
+    --van-tabs-bottom-bar-width: 5rem;
+    --van-tabs-line-height:2rem;
+    --van-tab-line-height:2rem;
+    --van-button-primary-background:var(--lead);
+    --van-button-primary-border-color:var(--border);
+    --van-button-radius : .4rem;
+    --van-tabs-bottom-bar-color:var(--text_primary);
+    --van-field-input-text-color:var(--lead);
+    --van-field-icon-size:1.5rem;
+    --van-field-word-limit-line-height:1.5rem;
+    --van-field-clear-icon-size: 1.5rem;
+    --van-field-label-margin-right:.5rem;
+    --van-field-label-color:var(--lead);
+    --van-cell-text-color:var(--lead);
+    --van-cell-background:var(--bg_2);
+    --van-padding-base:1rem;
+    --van-cell-active-color:var(--bg_2);
+    --van-cell-icon-size:1rem;
+    --van-cell-line-height:2rem;
+    --van-cell-vertical-padding:1rem;
+    --van-cell-horizontal-padding: 1rem;
+}
+/* 分割细线 */
+.van-hairline--top::after {
+    border-color: var(--neutral_1);
+}
+.chargePop .van-tab {
+    padding: 0;
+}
+/* 导航Tab背景 */
+.van-tabs__nav--line {
+    background-color: transparent;
+}
+/* 导航文字高亮 */
+.van-tab--active {
+    color: var(--primary);
+}
+/* 充值按钮 */
+.van-button__icon.van-icon {
+    flex: 1;
+  }
+.van-button__content .van-button__text {
+    flex: 9;
 }
 button {
     background-color: var(--text_primary);
 }
 .app-container .van-icon-arrow-left {
     font-size: 1.3rem;
+}
+.my-hairline::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0.1rem;
+    width: 100%;
+    background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.192) 50.5%);
+}
+.my-hairline {
+    position: relative;
+}
+.van-icon__image {
+    width: 1.5em;
+    height: 1.5em;
+}
+.van-field__control::placeholder {
+    color: var(--neutral_2);
+}
+.van-field__label {
+    font-size: 1rem;
+    line-height: 1.3rem;
+}
+.chargePop .van-field__control {
+    line-height: 1.3rem;
+}
+.van-field-7-input {
+    line-height: 1.3rem;
+}
+.chargePop .van-icon-clear {
+    line-height: 1.4rem;
+}
+.van-cell__title{
+    text-align: start;
+}
+.van-cell__left-icon{
+    font-size: 1.5rem;
+    color: var(--primary);
 }

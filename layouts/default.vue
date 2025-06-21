@@ -2,42 +2,53 @@
   <div class="fixed-width-layout">
     <div class="container">
       <section class="section-content">
-        <header ref="page">
-          <div class="head-content">
-            <div class="download">
-              <span @click="hideDownload" class="closeBtn">X</span>
-              <div class="downloadImg">放下载横幅的地方</div>
-              <button class="downloadBtn">立即下载</button>
-            </div>
+        <header>
+          <div class="head-content" ref="headerElement" :class="{ 'no-download-height': !showDownloadBar }">
+            <Download @download-closed="handleDownloadClosed" />
             <div class="search-content">
               <img src="../components/imges/logo.png" alt="">
-              <button @click="sDownload">123</button>
+              <button class="mm" @click="() => console.log(headerHeight)">123</button>
             </div>
           </div>
         </header>
-        <main>
-          <slot></slot>
+        <div class="my-hairline"></div>
+        <main ref="defaultScrollElement">
+          <slot :headerHeight="headerHeight"></slot>
         </main>
       </section>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-    
-    const showDownload = ref(true)
-    const page = ref(null);
-    function sDownload() {
-      if (page.value) {
-        showDownload.value = true;
-        (page.value as HTMLElement).classList.remove('hideDownload')
-      }
+  const headerElement = ref<HTMLElement | null>(null);
+  const defaultScrollElement = ref<HTMLElement | null>(null);
+
+  const headerHeight = ref(0);
+  const showDownloadBar = ref(true); 
+  // 测量头部高度的安全函数
+  const measureHeaderHeight = () => {
+    if (headerElement.value) {
+      headerHeight.value = headerElement.value.offsetHeight;
+    } else {
+      headerHeight.value = 0;
     }
-    function hideDownload() {
-      if (page.value) {
-        showDownload.value = false;
-        (page.value as HTMLElement).classList.add('hideDownload')
-      }
-    }
+  };
+  // 组件挂载时，进行初始测量
+  onMounted(() => {
+    nextTick(measureHeaderHeight); 
+  });
+  // 计算头部高度
+  watch(
+    showDownloadBar,
+    () => {
+      setTimeout(() => nextTick(measureHeaderHeight), 400);
+    }, { immediate: false }
+  );
+  provide('defaultScrollElement', defaultScrollElement); 
+  provide('headerHeight', headerHeight); 
+  const handleDownloadClosed = () => {
+    showDownloadBar.value = false; // 更新状态，让父组件的布局响应
+  };
 </script>
 <style scoped>
 *,
@@ -47,29 +58,24 @@
   scrollbar-width: 0;
 }
 .section-content {
-  padding-top: 4.5vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100vh;
+  overflow-y: hidden;
 }
-  .header-trans-enter-active,
-  .header-trans-leave-active {
-    transition: all 0.3s ease;
-  }
-  .header-trans-enter-from,
-  .header-trans-leave-to {
-    transform: translateY(-100%); 
-  }
   .fixed-width-layout {
     display: flex;
     justify-content: center; 
-    position: relative;
+    position: absolute;
     box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: var(--home_bg);
   }
   header{
-    position: fixed;
-    right: 50%;
-    transform: translateX(50%);
-    width: calc(100vh * 11 / 19.5);
+    width: 100%;
     text-align: center;
-    box-sizing: border-box;
     display: flex;
     align-items: center;
     background-color: #0a0a0a;
@@ -77,23 +83,13 @@
     flex-grow: 1;
   }
   main {
+    flex-grow: 1;
     overflow-y: auto;
     background-color: #0000;
-    padding-top: 9vh;
-    transition: padding 0.3s ease;
-  }
-  .hideDownload+main {
-    padding-top: 4.5vh;
-  }
-  header {
-    top: 0;
-    z-index: 2;
-    transition: transform 0.3s ease;
-    background-color: #1a1a1a;
-    overflow-x: hidden;
-  }
-  header.hideDownload {
-    transform: translateY(-4.5vh) translateX(50%);
+    padding-top: 0;
+    scroll-padding-top:12vh;
+    overscroll-behavior-y: contain; 
+    width: 100%;
   }
   .container {
     width: 100%;
@@ -105,27 +101,21 @@
     line-height: 0;
   }
   .head-content {
-    width: 100vw;
-    padding-bottom: 1%;
+    width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1%;
     box-sizing: border-box;
     background-color: #1a1a1a;
+    height: 12vh;
+    transition: height 0.4s ease;
   }
-  .head-content::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    height: 0.1vh;
-    width: 100%;
-    background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.411) 50.5%);
+  .no-download-height {
+    height: 7.5vh; /* 只有搜索框的高度 */
   }
   .search-content {
-    flex-grow: 1;
     height: 7.5vh;
-    flex-grow: 1;
-    padding: 3.5% 1% 1% 2%;
+    padding: .5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -163,5 +153,4 @@
   .downloadImg{
     flex: 15;
   }
-
 </style>

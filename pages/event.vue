@@ -5,12 +5,12 @@
 </template>
 
 <script setup lang="ts">
-    definePageMeta({
-        layout: 'event-page',
-        layoutTransition: {
-            name: 'layout-left'
-        },
-    })
+import { useLayoutTransition  } from '@/composable/usePageTransition';
+
+  definePageMeta({
+    layout: 'event-page',
+    layoutTransition: useLayoutTransition()
+  })
 </script>
 <style>
     .event-container {

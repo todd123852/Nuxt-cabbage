@@ -7,6 +7,7 @@
       close-icon-position="top-left"
       close-icon="arrow-left"
       :close-on-click-overlay = false
+      class="chargePop"
     >
       <div class="charge-header">
         <span></span>
@@ -18,102 +19,109 @@
       </div>
       <van-tabs v-model:active="activeTab">
         <!-- 大类列表 -->
-        <van-tab v-for="type in chargeTabOpition" 
+        <van-tab v-for="(type, typeIndex) in chargeTabOpition" 
         :title="type.chargeType"
         :key="type.chargeType"
         >
+        
           <div class="merchantContent">
             <!-- 商户列表 -->
             <div class="merchantItem" 
-            v-for="merchant in type.opition"
+            v-for="(merchant, merchantIndex) in type.opition"
             :key="merchant.name"
             >
-              <van-button icon="plus" 
+              <van-button :icon="merchant.icon"
               type="primary"
               plain hairline
+              :style="activeBtn === merchantIndex ? 'border-color: #D1AE52; color: #D1AE52' : ''"
+              @click="selectMerchant(typeIndex, merchantIndex)"
               >
               {{ merchant.name }}</van-button>
             </div>
-            <!-- 推荐金额 -->
-            <!-- <div class="recommend">
-              <div class="amount-btn" v-for="">
-  
-              </div>
-            </div> -->
+          </div>
+          <div class="my-hairline"></div>
+          <!-- 推荐金额 -->
+          <p class="recommendTittle" v-show="currentRecommend.length > 0">充值金额</p>
+          <div class="recommend">
+            <div class="amount-btn" 
+            v-for="(amount, amountIndex) in currentRecommend"
+            >
+              <van-button
+                type="primary"
+                plain hairline
+                :style="activeAmount === amountIndex ? 'border-color: #D1AE52; color: #D1AE52' : ''"
+                @click="selectAmount(amount, amountIndex)"
+                >
+                {{ amount }}</van-button>
+            </div>
           </div>
         </van-tab>
       </van-tabs>
-
+      <div class="field-content">
+        <van-field
+          @focus="fieldFocus = true"
+          @blur="fieldFocus = false"
+          :class="{'field-focus':fieldFocus}"
+          v-model="amountInput"
+          label-width="1rem"
+          clearable
+          label="￥"
+          placeholder="最小50-最大1000"
+        />
+      </div>
+      <div class="chargeTips">温馨提醒: 充就充大的，别墅住大的</div>
+      <van-button type="primary" id="submitCharge">立即充值</van-button>
+      <!-- <van-loading id="charge-loading" size="4rem" /> -->
     </van-popup>
 </template>
 <script setup lang="ts">
     import { usePopup } from '@/stores/Popup';
     const popupStore = usePopup();
-    const activeTab = ref(0)
-    const chargeTabOpition = reactive([
-      {
-        chargeType:'在线充值', 
-        opition: [
-          {name: '支付宝', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: '微信转账', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: '银联扫码', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: '云闪付', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: 'K豆钱包', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]},
-          {name: '波币钱包', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]},
-          {name: 'QQ', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]},
-        ], 
-        realName:true, 
-        tips:'请填写真实姓名', 
-        amountInput: true, 
-        badge: '213',
-        icon:''
-      }, 
-      {
-        chargeType:'数字货币', 
-        opition: [
-          {name: 'ETH', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: 'USDT', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: 'BTC', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: 'ERC-20', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}, 
-          {name: 'No钱包USDT', icon:'', badge:'', recommend:[10, 20, 30, 50, 90]}
-        ], 
-        realName:true, 
-        tips:'请填写真实姓名', 
-        amountInput: true, 
-        badge: '213',
-        icon:''
-      }, 
-      {
-        chargeType:'人工充值', 
-        opition: [
-          {name: '天天', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '雨柔', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '倪倪', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '精神小妹', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '甜甜奶心', icon:'', badge:'', recommend:[], customTip:''}
-        ],  
-        realName:false, 
-        tips:'', 
-        amountInput: false, 
-        badge: '213',
-        icon:''
-      }, 
-      {
-        chargeType:'银商充值', 
-        opition: [
-          {name: '币行天下', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '速币通', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '虚拟币阁', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '星辰兑', icon:'', badge:'', recommend:[], customTip:''}, 
-          {name: '数字方舟', icon:'', badge:'', recommend:[], customTip:''}
-        ],  
-        realName:false, 
-        tips:'请联系商家获取专属充币账号', 
-        amountInput: false, 
-        badge: '213',
-        icon:''
+    const activeTab = ref(0) // Tab高亮
+    const activeBtn = ref(0) // 商户高亮
+    const amountInput = ref('') // 输入金额
+    const activeAmount = ref<number | null>(null) // 推荐金额高亮
+    const chargeTabOpition = popupStore.chargeData
+    // 选中的商户
+    const activeMerchant: any = computed(() => {
+      const currentType = chargeTabOpition[activeTab.value];
+      if (currentType && currentType.opition[activeBtn.value]) {
+        return currentType.opition[activeBtn.value];
       }
-    ])
+      return {}; // 没有返回空
+    });
+
+    // 点击改变商户
+    function selectMerchant(typeIndex:number, merchantIndex:number) {
+      if (typeIndex === activeTab.value) {
+        activeBtn.value = merchantIndex;
+      }
+      activeAmount.value = null;
+    }
+    // 点击推荐金额同步输入框
+    function selectAmount(amount:number, amountIndex:number) {
+      activeAmount.value = amountIndex;
+      amountInput.value = amount.toString()
+    }
+    // 当前推荐金额
+    const currentRecommend = computed(() => {
+      return activeMerchant.value.recommend ? activeMerchant.value.recommend : [] 
+    });
+    watch(
+      activeTab,
+      () => {
+        activeBtn.value = 0;
+        amountInput.value = '';
+        activeAmount.value = null
+      }
+    )
+    watch(activeBtn, () => {
+      amountInput.value = '';
+      activeAmount.value = null; 
+    })
+
+    // 输入框高亮
+    const fieldFocus = ref(false);
 </script>
 <style lang="css" scoped>
 :root:root {
@@ -130,7 +138,7 @@
   }
   .van-popup {
     background-color: var(--bg_2);
-    padding: .2rem;
+    padding: .2rem 1rem;
   }
   .charge-header {
     display: flex;
@@ -138,13 +146,80 @@
     height: 3rem;
   }
   .merchantContent {
+    display: grid; 
+    width: 100%;   
+    grid-template-columns: 1fr 1fr; 
+    gap: .8rem 1.3vw;
+    padding: .8rem 0;
+  }
+  .chargePop .van-button {
+    height: 2.5rem;
+    width: 100%;
+    padding: 0 .3rem;
+    background-color: transparent;
+    justify-content: unset;
+  }
+  .amount-btn .van-button {
+    color: var(--neutral_1);
+  }
+  .van-button__content {
     display: flex;
-    flex-wrap: wrap;
+  }
+  .van-button__icon.van-icon {
+    flex: 1;
+  }
+  .van-button__content .van-button__text {
+    flex: 9;
   }
   .header-service-recorder .van-icon {
     color: var(--lead);
     font-size: 1.3rem;
-    padding: 1rem .6rem;
+    padding: 1rem .3rem;
   }
-
+  .recommend {
+    display: grid; 
+    width: 100%;   
+    grid-template-columns: 1fr 1fr 1fr 1fr; 
+    gap: .7rem 1.3vw;
+    padding:.7rem 0;
+    /* margin: .5rem 0; */
+  }
+  .recommendTittle {
+    color: var(--lead);
+    padding: 1rem 0 .5rem .5rem;
+    text-align: start;
+  }
+  .van-button__content .van-icon__image {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .chargeTips {
+    color: var(--lead);
+    text-align: start;
+    margin: 1rem 0;
+  }
+  .van-field {
+    border: solid 1px var(--border);
+    border-radius: .5rem;
+    padding: .6rem;
+    background-color: transparent;
+    color: var(--border);
+    height: 2.6rem;
+  }
+  .van-field.field-focus {
+    border-color: var(--primary);
+  }
+  #submitCharge {
+    background-color: var(--primary);
+    color: var(--text_accent3);
+    height: 2.7rem;
+    border-radius: .5rem;
+    font-size: 1rem;
+  }
+  #charge-loading {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 50%;
+  }
 </style>
