@@ -127,6 +127,15 @@
 :root:root {
   --van-popup-close-icon-margin: 1rem 1rem;
 }
+  .van-popup, .van-overlay{
+    width: calc(100vh * 11 / 19.5);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  .van-popup {
+    background-color: var(--bg_2);
+  }
   .charge-tittle {
     font-size: 1.3rem;
     color: var(--lead);
@@ -137,8 +146,8 @@
     top: 1rem;
   }
   .van-popup {
-    background-color: var(--bg_2);
     padding: .2rem 1rem;
+    height: 95%;
   }
   .charge-header {
     display: flex;

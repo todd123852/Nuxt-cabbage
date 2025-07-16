@@ -4,13 +4,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { useLayoutTransition } from '@/composable/usePageTransition';
-const route = useRoute();
-
   definePageMeta({
-    layout: 'login-regist',
-    layoutTransition: useLayoutTransition()
-  })
+    layout: 'login-regist', 
+  });
 </script>
 
 <style scoped>

@@ -8,6 +8,7 @@
     --border: #333333;
     --bg_1: #0A0A0A;
     --bg_2: #1A1A1A;
+    --bg_3: #1b1b1b;
     --accent_1: #04BE02;
     --accent_2: #EA4E3D;
     --accent_3: #FFAA09;
@@ -22,7 +23,8 @@
     --van-tabs-line-height: 2.5rem;
     --van-tabs-bottom-bar-height:.2rem;
     --van-tabs-bottom-bar-width: 5rem;
-    --van-tabs-line-height:2rem;
+    --van-tabs-line-height:3.3rem;
+    --van-tab-text-color:var(--lead);
     --van-tab-line-height:2rem;
     --van-button-primary-background:var(--lead);
     --van-button-primary-border-color:var(--border);
@@ -41,7 +43,26 @@
     --van-cell-icon-size:1rem;
     --van-cell-line-height:2rem;
     --van-cell-vertical-padding:1rem;
-    --van-cell-horizontal-padding: 1rem;
+    --van-cell-horizontal-padding: 0;
+    --van-tabs-nav-background: transparent;
+    /* 跑马灯样式 */
+    --van-notice-bar-height:3rem;
+    --van-notice-bar-line-height:0;
+    --van-notice-bar-icon-size:1.5rem;
+    --van-notice-bar-icon-min-width:2.2rem;
+    --van-notice-bar-background:transparent;
+    --van-notice-bar-text-color:var(--accent_3);
+    --van-notice-bar-padding:0;
+    /* 大厅中部导航 */
+    --van-popup-background: var(--bg_2);
+    --van-grid-item-content-background:var(--bg_2);
+    --van-popover-light-background:var(--bg_2);
+    --van-grid-item-text-color:var(--neutral_1);
+    --van-grid-item-text-font-size:.8rem;
+    --van-grid-item-content-active-color: transparent;
+    --van-grid-item-content-padding: 0 .2rem;
+    --van-popover-action-width:700px;
+    --van-popover-action-height:800px;
 }
 /* 分割细线 */
 .van-hairline--top::after {
@@ -70,6 +91,7 @@ button {
 }
 .app-container .van-icon-arrow-left {
     font-size: 1.3rem;
+    cursor: pointer;
 }
 .my-hairline::after{
     content: '';
@@ -77,7 +99,7 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 0.1rem;
+    height: 1px;
     width: 100%;
     background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.192) 50.5%);
 }
@@ -110,4 +132,31 @@ button {
 .van-cell__left-icon{
     font-size: 1.5rem;
     color: var(--primary);
+}
+.van-notice-bar .van-notice-bar__left-icon {
+    color: var(--neutral_1);
+}
+/* 跑马灯图标色 */
+.van-notice-bar .van-icon-envelop-o {
+    color: var(--neutral_1);
+    font-size: 2rem;
+    padding-left: .3rem;
+}
+/* 中部导航 */
+.van-popover {
+    border-radius: 4%;
+}
+.van-popover .van-icon__image {
+    width: 2rem;
+    height: 2rem;
+}
+.van-popover .van-grid {
+    width: 70%;
+}
+.van-popover .van-grid-item {
+    margin:.5rem 0;
+}
+.home-page .van-popup {
+    border-radius: 4%;
+    width: 20rem;
 }

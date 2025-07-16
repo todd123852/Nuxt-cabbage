@@ -5,9 +5,15 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt', '@vant/nuxt'],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  // 这会告诉 Nuxt 使用 GitHub Pages 的特定构建优化。
+  nitro: {
+    preset: 'github-pages'
+  },
   app: {
+    baseURL: '/Nuxt-cabbage/',
+    buildAssetsDir: 'nuxt_assets',
     head: {
-      title: 'my-nuxt-app',
+      title: 'cabbage',
       htmlAttrs: {
         lang: 'en'
       },

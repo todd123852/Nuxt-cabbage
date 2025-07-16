@@ -12,7 +12,6 @@ import usdc from '@/components/imges/chargeIcon/icon_cz_usdc.png'
 import eth from '@/components/imges/chargeIcon/icon_cz_eth.png'
 import kjcz from '@/components/imges/chargeIcon/icon_cz_kjcz.png'
 
-
 export const usePopup = defineStore('popup', () => {
     const chargePop = ref(false);
     const chargeData = reactive([

@@ -45,12 +45,18 @@ const popupStore = usePopup();
     --van-tabbar-item-icon-margin-bottom: 0.5rem;
     --van-tabbar--fixed-position:reactive;
   }
-    .activeColor {
+    .footer-nav .nav-content .van-tabbar-item--active {
         color: rgb(231, 178, 80);
+    }
+    .nav-content .van-tabbar-item__icon {
+        margin: 0;
     }
     .footer-nav {
         position: relative;
         height: 100%;
+    }
+    .footer-nav .van-tabbar-item {
+        color: var(--lead);
     }
     .nav-content {
         height: 100%;

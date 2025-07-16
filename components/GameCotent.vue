@@ -1,10 +1,10 @@
 <template>
-    <div class="game-content" :style="{ '--header-height': headerHeight + 'px' }">
+    <div ref="gameContent" class="game-content" :style="{ '--header-height': headerHeight + 'px' }">
     <div class="side-sticky">
       <div class="side-nav-placeholder" :ref="(el) => { if (el) sideNavPlaceholderRef = el as HTMLElement }"></div>
       <div class="side-nav" :class="{ 'is-fixed': isSideNavFixed }" :ref="(el) => { if (el) sideNavRef = el as HTMLElement }">
         <div
-          v-for="(game, index) in gameType"
+          v-for="(game, index) in gameInfoStore.gameType"
           :key="game.type"
           class="scroll-target"
           @click="handleSideNavItemClick(index)" :class="{ 'is-active': currentActiveGameType === game.type }"
@@ -18,22 +18,20 @@
         </div>
       </div>
     </div>
-  
-      <div class="game-list">
-        <van-tabs 
-          v-model:active="gameTabActive" 
-          id="gameTabs" 
-          :ref="(el) => { if (el) gameTabsRef = el as HTMLElement }"
-        >
-          <van-tab v-for="(tab, index) in gameTabs" :title="tab" :key="tab">
-            <GameDiary v-if="index === 0" /> 
-          </van-tab>
-        </van-tabs>
-  
-        <div class="game-type-list">
+    <div class="game-list">
+      <van-tabs 
+        v-model:active="gameTabActive" 
+        id="gameTabs" 
+        :ref="(el) => { if (el) gameTabsRef = el as HTMLElement }"
+      >
+        <van-tab v-for="(tab, index) in gameTabs" :title="tab" :key="tab">
+          <GameDiary v-if="index === 0" /> 
+        </van-tab>
+      </van-tabs>
+      <div class="game-type-list">
           <div
             class="game-list-link"
-            v-for="(game, index) in gameType"
+            v-for="(game, index) in gameInfoStore.gameType"
             :key="game.type"
             :id="game.type"
             :ref="(el) => { if (el) gameRefs[index] = el as HTMLElement }"
@@ -55,36 +53,18 @@
     </div>
 </template>
 <script setup lang="ts">
-    import slotIcon from '@/components/imges/GameTypeIcon/icon_dtfl_dz_1.png'
-    import fishingIcon from '@/components/imges/GameTypeIcon/icon_dtfl_by_1.png'
-    import liveIcon from '@/components/imges/GameTypeIcon/icon_dtfl_zr_1.png'
-    import sportIcon from '@/components/imges/GameTypeIcon/icon_dtfl_ty_1.png'
-    import lotteryIcon from '@/components/imges/GameTypeIcon/icon_dtfl_cp_1.png'
-    import esportIcon from '@/components/imges/GameTypeIcon/icon_dtfl_dianjing_1.png'
-    import cardsIcon from '@/components/imges/GameTypeIcon/icon_dtfl_qp_1.png'
-    import blockchainIcon from '@/components/imges/GameTypeIcon/icon_dtfl_qkl_1.png'
-    import hot from '@/components/imges/GameTypeIcon/icon_dtfl_rm_1.png'
-
-    const gameType = reactive([
-        {name:'热门', thirdParties: ['PG', 'WG', 'LG', 'PP'], type: 'hot', icon: hot},
-        {name:'电子', thirdParties: ['PG', 'WG', 'LG', 'PP'], type: 'slot', icon: slotIcon},
-        {name:'捕鱼', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'fishing' , icon: fishingIcon},
-        {name:'真人', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'live' , icon: liveIcon},
-        {name:'体育', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'sport' , icon: sportIcon},
-        {name:'彩票', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'lottery' , icon: lotteryIcon},
-        {name:'电竞', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'e-sport' , icon: esportIcon},
-        {name:'棋牌', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'cards' , icon: cardsIcon},
-        {name:'区块链', thirdParties: ['PA', 'PP', 'DB', 'BG'], type: 'blockchain' , icon: blockchainIcon}
-    ]);
+import { useGameInfo } from '~/stores/GameInfo'
+const gameInfoStore = useGameInfo();
     
     const gameTabActive = ref(0);
     const gameTabs = ['热门', '最近', '收藏'];
     const gameRefs = ref<HTMLElement[]>([]);
     const gameTabsRef = ref<HTMLElement | null>(null); // 获取 van-tabs 容器的引用
-    const currentActiveGameType = ref(gameType[0].type); 
+    const currentActiveGameType = ref(gameInfoStore.gameType[0].type); 
     const headerHeight = inject<Ref<number>>('headerHeight', ref(0));   
+    const showDownloadBar = inject<Ref<boolean>>('showDownloadBar', ref(true));
     const mainScrollContainer = inject<Ref<HTMLElement | null>>('defaultScrollElement', ref(null));   //  main 元素引用
-
+    const gameContent = ref<HTMLElement | null>(null); // 游戏列表最顶部
     // 每次组件更新前清空 ref 数组，确保引用是最新的
     onBeforeUpdate(() => {
       gameRefs.value = [];
@@ -93,17 +73,26 @@
     const sideNavRef = ref<HTMLElement | null>(null);     
     const sideNavPlaceholderRef = ref<HTMLElement | null>(null);
     const isSideNavFixed = ref(false); // 控制 side-nav 是否为fix
+
+    // 传递给爷组件展示置顶按钮的高度
+    const gameContentTop = ref<number>(270);
+    onMounted(() => gameInfoStore.gameContentTop = gameContent.value?.offsetTop || 270);
+
     let stickyStartScrollTop = 0;  //'main' 元素的 scrollTop 值
-    let fixedLeftOffset = 0; // side-nav 的 left 偏移量
+    watch(showDownloadBar, () => {
+      if (!showDownloadBar.value && sideNavRef.value) {
+        sideNavRef.value.style.top = (headerHeight.value - ((window.innerHeight*4.5)/100)) + 'px';
+      }
+    });
+    let fixedLeftOffset = 0 // side-nav 的 left 偏移量
 
     // 统一处理侧边栏导航项的点击
     const handleSideNavItemClick = (index: number) => {  
-      const targetGame = gameType[index]; // 获取被点击的游戏类型数据
+      const targetGame = gameInfoStore.gameType[index]; // 获取被点击的游戏类型数据
       let targetElement: HTMLElement | null = null; // 目标滚动元素
       
       if (index === 0) { // 如果点击的是第一个元素，即“热门”
-        gameTabActive.value = 0; // 切换 van-tabs 到第一个（热门）tab
-        targetElement = gameTabsRef.value; // 目标元素是 van-tabs 容器
+        gameTabActive.value = 0; 
       } else {
         targetElement = gameRefs.value[index]; // 点击的是其他游戏类型 (非热门)
       }
@@ -115,10 +104,9 @@
       if (targetElement) {
         if (mainScrollContainer.value) {
           const targetRect = targetElement.getBoundingClientRect(); 
-          const mainRect = mainScrollContainer.value.getBoundingClientRect(); // 主滚动容器
-
+          const mainRect = mainScrollContainer.value.getBoundingClientRect(); 
+  
           // 计算目标元素相对于主滚动容器顶部的当前位置
-
           const targetOffsetTopInMain = targetRect.top - mainRect.top + mainScrollContainer.value.scrollTop;
           
           // 计算最终的滚动位置：目标元素顶部位置 - 头部高度
@@ -129,8 +117,11 @@
             behavior: 'smooth'
           });
         }
-      } else {
-        console.warn(`Target element for ${targetGame.name} at index ${index} is not found.`);
+      } else if (mainScrollContainer.value && gameContent.value) {
+        mainScrollContainer.value.scrollTo({
+          top: gameContent.value.offsetTop,
+          behavior: 'smooth'
+        });
       }
     };
 
@@ -140,23 +131,15 @@
         console.error("未找到主滚动容器 (main)！无法设置滚动监听器。");
         return;
     }    
-    nextTick(() => {      
-      if (sideNavRef.value && sideNavPlaceholderRef.value && mainScrollContainer.value) {
-      // 获取 main 的 rect
+    nextTick(() => {         
+      window.addEventListener('load', handleResize);
+      if (sideNavRef.value && sideNavPlaceholderRef.value && mainScrollContainer.value&&gameContent.value) {
         const sideNavRect = sideNavRef.value.getBoundingClientRect();        
-        const mainRect = mainScrollContainer.value.getBoundingClientRect(); 
-        
-        // 相对于文档顶部的绝对位置：
-        const sideNavAbsoluteTop = sideNavRect.top + window.scrollY; 
-        const mainAbsoluteTop = mainRect.top + window.scrollY; 
-        // console.log(mainAbsoluteTop);
-        
-        // sideNav 需要滚动的距离 = sideNav 在 main 内容中的初始相对位置
-        stickyStartScrollTop = sideNavAbsoluteTop - mainAbsoluteTop;
-        stickyStartScrollTop = Math.max(0, stickyStartScrollTop); // 确保不为负
+        stickyStartScrollTop = gameContent.value.offsetTop;
 
-        // 这是 side-nav 在文档流中时，距离视口左边缘的绝对像素距离。
-        fixedLeftOffset = sideNavRect.left; 
+        // ，距离视口左边缘的绝对像素距离。
+        const bodyRect = document.body.getBoundingClientRect();
+        fixedLeftOffset = bodyRect.left + (bodyRect.height * 0.02);
         
         // 设置占位符的尺寸
         sideNavPlaceholderRef.value.style.width = `${sideNavRect.width}px`;
@@ -167,7 +150,7 @@
         
         handleScroll(); // 首次加载时检查一次
       } else {
-        console.warn('未找到所需的一个或多个 DOM 元素 (sideNavRef, sideNavPlaceholderRef)。');
+        console.warn('未找到所需的一个或多个 DOM 元素');
       }
     });
 });
@@ -184,8 +167,9 @@ const handleScroll = () => {
   if (!mainScrollContainer || !sideNavRef.value || !sideNavPlaceholderRef.value) {    
     return
   };
+
   const currentScrollTop = mainScrollContainer.value?.scrollTop|| 0;
-  // 检查是否已滚动到吸附点
+
   if (currentScrollTop >= stickyStartScrollTop) {
     if (!isSideNavFixed.value) {
       isSideNavFixed.value = true;      
@@ -195,7 +179,8 @@ const handleScroll = () => {
     }
   } else {
     // 尚未达到吸附点，或已向上滚动
-    if (isSideNavFixed.value) {
+    if (isSideNavFixed.value) {  
+      
       isSideNavFixed.value = false;
       sideNavRef.value.style.left = ''; // 移除固定时的 left
       sideNavPlaceholderRef.value.classList.remove('is-visible');
@@ -206,24 +191,22 @@ const handleScroll = () => {
 // --- 窗口大小变化处理函数 ---
 const handleResize = () => {
   nextTick(() => {
-    if (mainScrollContainer.value && sideNavRef.value && sideNavPlaceholderRef.value) {
+    console.log(gameContent.value?.offsetTop);
+    gameInfoStore.gameContentTop = gameContent.value?.offsetTop || 270;
+    if (sideNavRef.value && sideNavPlaceholderRef.value && gameContent.value) {
       const sideNavRect = sideNavRef.value.getBoundingClientRect();
-      const mainRect = mainScrollContainer.value.getBoundingClientRect();
+
+      const bodyRect = document.body.getBoundingClientRect();
+      fixedLeftOffset = bodyRect.left + (bodyRect.height * 0.02);
       
       // 重新计算吸附点和 left 值
-      const sideNavAbsoluteTop = sideNavRect.top + window.scrollY;
-      const mainAbsoluteTop = mainRect.top + window.scrollY;
-      stickyStartScrollTop = sideNavAbsoluteTop - mainAbsoluteTop;
-      stickyStartScrollTop = Math.max(0, stickyStartScrollTop); 
-
-      fixedLeftOffset = sideNavRect.left;
-
+      stickyStartScrollTop = gameContent.value.offsetTop;
       sideNavPlaceholderRef.value.style.width = `${sideNavRect.width}px`;
       sideNavPlaceholderRef.value.style.height = `${sideNavRect.height}px`;
 
       if (isSideNavFixed.value) {
         sideNavRef.value.style.left = `${fixedLeftOffset}px`;
-      }
+      }      
       handleScroll(); // 重新检查滚动状态
     }
   });
@@ -260,19 +243,20 @@ html {
       position: fixed; 
       top: var(--header-height);
       left: auto; 
+      transition: top .4s ease;
     }
     .side-nav .scroll-target {
-        height: 5vh;
-        width: 5.4rem;
-        background-color: #222222;
-        display: flex;
-        align-items: center;
-        word-wrap: break-word;
-        margin: 2vh 0;
-        border-radius: 10%;
-        font-size: 1.5vh;
-        cursor: pointer;
-        color: var(--neutral_1);
+      height: 5vh;
+      width: 5.4rem;
+      background-color: #222222;
+      display: flex;
+      align-items: center;
+      word-wrap: break-word;
+      margin: 1.5vh 0;
+      border-radius: 10%;
+      font-size: 1.5vh;
+      cursor: pointer;
+      color: var(--neutral_1);
     }
         /* 侧边导航项的激活样式 */
     .side-nav .scroll-target.is-active {
@@ -304,7 +288,7 @@ html {
     }
     .game-list {
         flex-grow: 1;
-        margin: 2vh 0;
+        margin: 0;
     }
     .type-head {
         color: var(--lead);

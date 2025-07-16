@@ -1,61 +1,129 @@
 <template>
-    <div class="myInfo">
+    <div class="myInfo" :style="{ backgroundImage: `url(${lobby_Img})`}">
         <section>
             <header>
                 <div class="header-item">
-                    <van-icon name="arrow-left" />
+                    <van-icon name="arrow-left" 
+                    @click="() => navigateTo(layoutTransitionStore.fromPath)" 
+                    />
                     <div class="head-nav">
                         <div class="btnContainer" 
                         v-for="item in headerItem" :key="item.icon">
-                            <div class="icon-box">
+                            <span>
                                 <van-icon :name="item.icon" :badge="item.badge" />
-                            </div>
+                            </span>
                             <p>{{ item.name }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="memberInfo">
-                    <div class="avator">图</div>
+                    <div class="visitorAvator"
+                    :style="{ backgroundImage: `url(${visitorImg})` }"
+                    ></div>
+                    <div class="login_regist_link">
+                        <span>请先</span>
+                        <NuxtLink>登录</NuxtLink>
+                        <span>或</span>
+                        <NuxtLink>注册</NuxtLink>
+                    </div>
+                    <div class="login_regist_btn">
+                        <button>登陆</button>
+                        <button>注册</button>
+                    </div>
                 </div>
             </header>
             <main>
                 <div class="navCardContainer">
-                    <nav>提现</nav>
-                    <nav>充值</nav>
-                    <nav>利息宝</nav>
-                    <nav>公积金</nav>
+                    <nav v-for="nav in navCards" 
+                    :key="nav.name" 
+                    @click="typeof nav.action === 'function' && nav.action()"
+                    >
+                        <van-icon :name="nav.icon" />
+                        <p>{{ nav.name }}</p>
+                    </nav>
                 </div>
-                <div class="vipContainer">
-                    <div class="vipHead"></div>
-                    <div class="vipProcess"></div>
+                <div class="vipContainer" v-if="true">
+                    <div class="vipHead">
+                        <span>距离<i>VIP1</i>还需投注<b>2.00</b></span>
+                        <van-icon name="arrow-right"  />
+                    </div>
+                    <div class="vipProcess">
+                        <div class="vip-icon"></div>
+                        <span>晋级再充值</span>
+                        <span>晋级再投注</span>
+                    </div>
                 </div>
                 <div class="menuList">
                     <van-cell
+                    class="menu-nav"
                     v-for="li in menu" :key="li.name"
-                    id="menu-list"
                     :border="false"
                     :title="li.name" 
                     icon="location-o" 
                     arrow-direction="right"
+                    @click="li.action ? li.action() : null;"
                     is-link
                     >{{  }}</van-cell>
                 </div>
+                <!-- 语言选择弹窗 -->
+                <van-popup 
+                v-model:show="editLanguage" 
+                :close-on-click-overlay="false"
+                ref="languagePop"
+                >
+                    <div class="language-content">
+                        <p class="language-tittle">选择语言</p>
+                        <div class="my-hairline"></div>
+                        <div v-for="(language, index) in languges" :key="language" 
+                        class="language-item"
+                        @click="activeLanguge = language"
+                        >
+                            <span>{{ language }}</span>
+                            <van-icon name="circle" v-if="language !== activeLanguge" />
+                            <van-icon name="checked" v-else="language === activeLanguge" />
+                            <div>
+                                <div class="my-hairline" v-if="index !== languges.length - 1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="close-dialog-Btn">
+                        <van-icon name="close" @click="editLanguage = false" />
+                    </div>
+                </van-popup>
             </main>
         </section>
     </div>
 </template>
 <script setup lang="ts">
-import { useLayoutTransition } from '@/composable/usePageTransition';
-
-  definePageMeta({
-    layout: 'mine',
-    layoutTransition: useLayoutTransition()
-  })
+import { usePopup } from '@/stores/Popup';
+import { useLayoutTransitionStore } from '@/stores/layoutTransition';
+import visitorImg from '@/components/imges/visitor_avator.avif'
+import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
+    const layoutTransitionStore = useLayoutTransitionStore();
+    const editLanguage = ref(false); // 语言弹窗开关
+    const languagePop = ref<HTMLElement | null>(null);
+    const popupStore = usePopup();
+    definePageMeta({
+        layout: 'mine', 
+    });
+    const showLanguagePop = () => {
+        editLanguage.value = true;        
+    };
+    const chargeAction = () => popupStore.chargePop = true;
+    const providentFund = () => navigateTo('/event');
+    const navCards = reactive([
+        {name: '提现', icon: 'card', action:''},
+        {name: '充值', icon: 'coupon', action: chargeAction},
+        {name: '公积金', icon: 'cash-back-record', action: providentFund},
+        {name: '利息宝', icon: 'discount', action: providentFund},
+    ])
     const headerItem = [
         {name:'客服', icon:'service', badge: '2'},
         {name:'消息中心', icon:'chat-o', badge: '99+'},
         {name:'个人资料', icon:'user', badge: ''},
     ];
+    const languges = reactive(['繁体中文', '简体中文', 'Chinese', 'Mandarin']);
+    const activeLanguge = ref(languges[0])
     const menu = reactive([
         {name: '找回余额', to: ''},
         {name: '账户明细', to: ''},
@@ -68,7 +136,7 @@ import { useLayoutTransition } from '@/composable/usePageTransition';
         {name: '个人资料', to: ''},
         {name: '安全中心', to: ''},
         {name: '找到我们', to: ''},
-        {name: '选择语言', to: ''},
+        {name: '选择语言', to: '', action: showLanguagePop},
         {name: '常见问题', to: ''},
         {name: '有奖反馈', to: ''},
         {name: '登陆设备', to: ''},
@@ -80,64 +148,202 @@ import { useLayoutTransition } from '@/composable/usePageTransition';
     .myInfo {
         width: 100%;
         height: 100vh;
+        position: relative;
+        background-color: var(--bg_2);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-color: var(--bg_2);
+        padding: 0 1rem;
+    }
+    section {
+        height: 100%;
+    }
+    .myInfo .van-icon {
+        color: var(--primary);
     }
     header {
         width: 100%;
-        height: 14vh;
-        background-color: aqua;
         display: flex;
         flex-direction: column;
-        position: relative;
+        padding-top: 1.5rem;
     }
-    .header-item .van-icon-arrow-left {
+    .header-item {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        color: var(--lead);
+    }
+    .myInfo .header-item .van-icon-arrow-left {
         position: absolute;
         font-size: 1.2rem;
-        left: .3rem;
-        top: .3rem;
+        left: .5rem;
+        top: 3rem;
+        margin: 0;
+    }
+    .header-item .van-icon {
+        font-size: 1.2rem;
+        margin-top: 1.8rem;
     }
     main {
         width: 100%;
     }
-    .header-item {
-        flex: 1;
+    .head-nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: rgb(126, 197, 135);
+        width: 35%;
     }
-    .head-nav {
-        flex: 1;
-        display: flex;
-        justify-content: end;
-        align-items: center;
+    .avator {
+        height: 3rem;
+        width: 3rem;
+        border-radius: 100%;
+        background-color: orange;
+    }
+    .visitorAvator {
+        height: 3.2rem;
+        width: 3.2rem;
+        border-radius: 10%;
+        background-size: 100%;
     }
     .memberInfo {
-        flex: 1;
-        background-color: rgb(193, 166, 218);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: .7rem ;
+        width: 100%;
+    }
+    .login_regist_link {
+        font-weight: 600;
+    }
+    .login_regist_link span {
+        color: var(--neutral_1);
+    }
+    .login_regist_link a{
+        color: var(--lead);
+        cursor: pointer;
+        margin: 0 .5rem;
+    }
+    .login_regist_btn {
+        width: 38%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .login_regist_btn button {
+        height: 2rem;
+        width: 47%;
+        border-radius: 13%;
+        font-size: .8rem;
+        border: solid .1rem var(--primary);
+        cursor: pointer;
+    }
+    .login_regist_btn button:first-child {
+        color: var(--text_accent3);
+        background-color: var(--primary);
+    }
+    .login_regist_btn button:last-child {
+        color: var(--primary);
+        background-color: transparent
     }
     .navCardContainer {
-        height: 10vh;
-        background-color: rgb(150, 192, 202);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
     }
-    .vipContainer {
-        height: 10vh;
-        background-color: rgb(126, 197, 135);
-    }
-    .menuList {
-        background-color: rgb(233, 24, 59);
+    .navCardContainer p {
+        font-size: .8rem;
         color: var(--lead);
     }
-    .btnContainer, .icon-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-right: 1.8%;
-        font-size: 1.4rem;
-        min-width: 2.8rem;
-        max-width: 2.8rem;
+    .navCardContainer .van-icon {
+        font-size: 2rem;
+    }
+    .vipContainer {
+        width: 100%;
+        background-color: var(--primary);
+        padding: 1.5rem;
+        border-radius: .8rem;
+        color: var(--text_accent3);
+    }
+    .vipContainer .van-icon {
+        color: var(--text_accent3);
+    }
+    .vip-icon {
+        width: 3rem;
+    }
+    .menuList {
+        background-color: var(--neutral_3);
+        color: var(--lead);
+    }
+    .menu-nav {
+        cursor: pointer;
     }
     .btnContainer p{
         font-size: 0.6rem;
+    }
+    .myInfo .van-popup {
+        color: var(--lead);
+        width: 21.5rem;
+        border-radius: 1rem;
+    }
+    #close-1anguage-popup {
+        position: fixed;
+        color: var(--lead);
+        left: 0;
+        right: 0;
+        bottom: 28%;
+        cursor: pointer;
+        font-size: 2rem;
+        z-index: 3333;
+    }
+    .language-item {
+        padding: 0.1rem .8rem;
+        text-align: start;
+        line-height: 3rem;
+        margin: auto;
+        font-size: .5rem;
+        position: relative;
+        cursor: pointer;
+    }
+    .language-tittle {
+        font-size: 1rem;
+        padding: 1rem 0;
+    }
+    .language-item span {
+        font-size: .8rem;
+        cursor: pointer;
+    }
+    .language-item .van-icon {
+        font-size: 1rem;
+        position: absolute;
+        right: .8rem;
+        top: 1rem;
+        cursor: pointer;
+    }
+    .van-popup, .van-overlay{
+        width: calc(100vh * 11 / 19.5);
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+    .myInfo .van-popup {
+        background-color: transparent;
+        padding-bottom: 3.5rem;
+        color: var(--lead);
+    }
+    .language-content {
+        background-color: var(--bg_2);
+        border-radius: 5%;
+        border: solid 1px var(--border);
+    }
+    .close-dialog-Btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        font-size: 2rem;
+    }
+    .close-dialog-Btn .van-icon {
+        color: var(--lead);
     }
 </style>
