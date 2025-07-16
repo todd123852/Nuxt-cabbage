@@ -1,0 +1,1 @@
+import{_ as n,c as o,o as s,ap as t}from"./DD0lyKUy.js";const a={},c={class:"mine-container"};function r(e,d){return s(),o("div",c,[t(e.$slots,"default",{},void 0)])}const f=n(a,[["render",r],["__scopeId","data-v-f20ea3d4"]]);export{f as default};
