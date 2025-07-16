@@ -1,1 +1,0 @@
-import{e as o,c as s,a as t,o as a,_ as n}from"./X5mWDuha.js";const _={class:"login-page"},c=o({__name:"login",setup(r){return(l,e)=>(a(),s("div",_,e[0]||(e[0]=[t("h1",null,"登录页",-1)])))}}),i=n(c,[["__scopeId","data-v-059e3173"]]);export{i as default};
