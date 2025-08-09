@@ -1,0 +1,1 @@
+import{ac as s,ad as u,ae as r,a1 as o,af as c,ag as i}from"./BoWfHopn.js";function n(t){const e=t||u();return e?.ssrContext?.head||e?.runWithContext(()=>{if(r())return o(c)})}function f(t,e={}){const a=n(e.nuxt);if(a)return i(t,{head:a,...e})}function x(t,e={}){const a=n(e.nuxt);if(a)return s(t,{head:a,...e})}export{x as a,f as u};
