@@ -1,12 +1,13 @@
 <template>
   <div>
     <div class="app-container" ref="appContainer">
+      <SideMenu />
       <section>
         <NuxtLayout>
           <NuxtPage />
         </NuxtLayout>
       </section>
-      <footer>
+      <footer v-show="haveFooter">
         <FooterNav />
       </footer>
       <!-- 充值弹窗 -->
@@ -17,8 +18,17 @@
 <script setup lang="ts">
 import '@vant/touch-emulator'; // vant的PC端点击事件
 const showChargeWindow = ref(true); // 固定窗口
+const route = useRoute();
+const haveNavRoute = ['/', '/event', '/myInfo', '/login', '/event', '/interest'];
+
+const haveFooter = computed(() => {
+if (!haveNavRoute.includes(route.path)) {
+    return false;
+} else {
+    return true
+}
+})
 </script>
-<style src="./components/style/vantCustomize.css"></style>
 <style>
 *{
   font-family: 'Microsoft YaHei' ,Helvetica, Arial, sans-serif;
@@ -31,6 +41,9 @@ const showChargeWindow = ref(true); // 固定窗口
   scroll-behavior: smooth;
   text-decoration: none;
   cursor:default;
+}
+input{
+  text-align: start;
 }
 /* 共同的过渡活跃状态 */
 .slide-forward-enter-active,
@@ -70,7 +83,7 @@ const showChargeWindow = ref(true); // 固定窗口
     margin: 0 auto;
     height: 100%;
     width: calc(100vh * 11 / 19.5);
-    background-color: #333333;
+    background-color: var(--border);
     box-sizing: border-box;
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -84,7 +97,7 @@ const showChargeWindow = ref(true); // 固定窗口
   }
   .nav-content .van-tabbar--fixed {
     position: relative;
-    background-color: black;
+    background-color: var(--skin__web_btmnav_db);
   }
   a {
     text-decoration: none;

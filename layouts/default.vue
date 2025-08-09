@@ -16,8 +16,8 @@
               </div>
             </div>
           </div>
+          <div class="my-hairline" style="height: 1px;"></div>
         </header>
-        <div class="my-hairline"></div>
         <main ref="defaultScrollElement" :class="{ 'no-scroll': isLoading }">
           <slot :headerHeight="headerHeight"></slot>
           <div class="backTop"
@@ -99,6 +99,10 @@
   box-sizing: inherit;
   scrollbar-width: 0;
 }
+header {
+  z-index: 11;
+  margin-bottom: 1px;;
+}
 .search-route-item {
   height: 100%;
   width: 3rem;
@@ -149,7 +153,6 @@
   main {
     flex-grow: 1;
     overflow-y: auto;
-    background-color: #0000;
     padding-top: 0;
     scroll-padding-top:12vh;
     overscroll-behavior-y: contain; 
@@ -164,7 +167,7 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: #1a1a1a;
+    background-color: var(--bg_2);
     height: 12vh;
     transition: all .4s ease;
     flex-shrink: 1;

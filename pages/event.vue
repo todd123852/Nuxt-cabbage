@@ -58,9 +58,9 @@
     align-items: center;
     color: var(--primary);
     border-radius: .4rem;
-    border: .1rem solid var(--primary);
+    box-shadow: .01rem 0 0 .04rem var(--primary);
     margin: 1rem 0;
-    background-color: var(--bg_3);
+    background-color: var(--web_left_bg_q);
     cursor: pointer;
   }
   .type-name {

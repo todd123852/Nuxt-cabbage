@@ -30,23 +30,24 @@ const popupStore = usePopup();
         {logoImg: 22, url: '/regist', name: '注册', icon: 'friends', charge: false},
         {logoImg: 33, url: '/myInfo', name: '我的', icon: 'user-o', charge: false},
     ])
-    console.log();
-    
 </script>
 
 <style>
   :root:root {
-    --van-tabbar-background: #000;
-    --van-tabbar-item-active-color: #f8be20;
+    --van-tabbar-background: var(--skin__web_btmnav_db);
+    --van-tabbar-item-active-color: var(--text_primary);
     --van-tabbar-height	: 9vh;
-    --van-tabbar-item-active-background:#000;
+    --van-tabbar-item-active-background:var(--skin__web_btmnav_db);
     --van-tabbar-item-icon-size: 4vh;
     --van-tabbar-item-font-size: 1rem;
     --van-tabbar-item-icon-margin-bottom: 0.5rem;
     --van-tabbar--fixed-position:reactive;
   }
     .footer-nav .nav-content .van-tabbar-item--active {
-        color: rgb(231, 178, 80);
+        color: var(--primary);
+    }
+    .nav-content {
+        background-color: var(--skin__web_btmnav_db);
     }
     .nav-content .van-tabbar-item__icon {
         margin: 0;

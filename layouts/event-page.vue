@@ -7,8 +7,13 @@
                         <van-icon name="arrow-left"
                         @click="() => navigateTo(layoutTransitionStore.fromPath)" />
                     </div>
-                    <van-tabs v-model:active="active">
-                        <van-tab v-for="type in discountTypes" :title="type" :key="type">
+                    <van-tabs v-model:active="eventPageStore.page" 
+                    :before-change="beforeChange"
+                    >
+                        <van-tab 
+                        v-for="type in discountTypes" 
+                        :title="type.name" :key="type.name"
+                        >
                         </van-tab>
                     </van-tabs>
                 </div>
@@ -22,9 +27,27 @@
 </template>
 <script setup lang="ts">
 import { useLayoutTransitionStore } from '@/stores/layoutTransition'; 
+import { useEventPage } from '~/stores/EventPage';
+const eventPageStore = useEventPage();
 const layoutTransitionStore = useLayoutTransitionStore();
 
-    const discountTypes = reactive(['活动', '利息宝', '公积金', '任务', 'VIP', '待领取', '领取记录', '自定义的看你想说什么'])
+    const discountTypes = reactive([
+        {name: '活动', route: '/event'},
+        {name: '利息宝', route: '/interest'},
+        {name: '返水', route: '/interest'},
+        {name: '公积金', route: ''},
+        {name: '任务', route: ''},
+        {name: 'VIP', route: ''},
+        {name: '待领取', route: ''},
+        {name: '领取记录', route: ''},
+        {name: '自定义的看你想说什么', route: ''},
+    ])
+    const beforeChange = (index:number) => {
+        navigateTo(discountTypes[index].route);
+        active.value = index;
+        // 返回 Promise 来执行异步逻辑
+        return true
+    }
     const active = ref(0)
 </script>
 <style scoped>
@@ -35,7 +58,7 @@ const layoutTransitionStore = useLayoutTransitionStore();
         width: 100%;
         height: 91vh;
         box-sizing: border-box;
-        background-color: var(--bg_1);
+        background-color: var(--home_bg);
     }
     header {
         position: relative;

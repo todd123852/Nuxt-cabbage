@@ -8,7 +8,9 @@
                     />
                     <div class="head-nav">
                         <div class="btnContainer" 
-                        v-for="item in headerItem" :key="item.icon">
+                        v-for="item in headerItem" :key="item.icon"
+                        @click="typeof item.action === 'function' && item.action()"
+                        >
                             <span>
                                 <van-icon :name="item.icon" :badge="item.badge" />
                             </span>
@@ -97,12 +99,14 @@
 <script setup lang="ts">
 import { usePopup } from '@/stores/Popup';
 import { useLayoutTransitionStore } from '@/stores/layoutTransition';
+import { useEventPage } from '~/stores/EventPage';
 import visitorImg from '@/components/imges/visitor_avator.avif'
 import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
     const layoutTransitionStore = useLayoutTransitionStore();
     const editLanguage = ref(false); // 语言弹窗开关
     const languagePop = ref<HTMLElement | null>(null);
     const popupStore = usePopup();
+    const eventPageStore = useEventPage();
     definePageMeta({
         layout: 'mine', 
     });
@@ -110,22 +114,28 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         editLanguage.value = true;        
     };
     const chargeAction = () => popupStore.chargePop = true;
-    const providentFund = () => navigateTo('/event');
+    const providentFund = () => {
+        eventPageStore.page = 1;
+        navigateTo('/interest');
+    }
+
     const navCards = reactive([
         {name: '提现', icon: 'card', action:''},
         {name: '充值', icon: 'coupon', action: chargeAction},
         {name: '公积金', icon: 'cash-back-record', action: providentFund},
         {name: '利息宝', icon: 'discount', action: providentFund},
     ])
+    const profileSetting = () => navigateTo('/profile')
     const headerItem = [
-        {name:'客服', icon:'service', badge: '2'},
-        {name:'消息中心', icon:'chat-o', badge: '99+'},
-        {name:'个人资料', icon:'user', badge: ''},
+        {name:'客服', icon:'service', badge: '2', action: ''},
+        {name:'消息中心', icon:'chat-o', badge: '99+', action: ''},
+        {name:'个人资料', icon:'user', badge: '', action: profileSetting},
     ];
     const languges = reactive(['繁体中文', '简体中文', 'Chinese', 'Mandarin']);
     const activeLanguge = ref(languges[0])
+    const toWallet = () => navigateTo('/center-wallet');
     const menu = reactive([
-        {name: '找回余额', to: ''},
+        {name: '找回余额', action: toWallet},
         {name: '账户明细', to: ''},
         {name: '投注记录', to: ''},
         {name: '个人报表', to: ''},
@@ -149,10 +159,9 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         width: 100%;
         height: 100vh;
         position: relative;
-        background-color: var(--bg_2);
+        background-color: var(--home_bg);
         background-size: 100%;
         background-repeat: no-repeat;
-        background-color: var(--bg_2);
         padding: 0 1rem;
     }
     section {
@@ -271,7 +280,7 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         width: 3rem;
     }
     .menuList {
-        background-color: var(--neutral_3);
+        background-color: var(--home_bg);
         color: var(--lead);
     }
     .menu-nav {

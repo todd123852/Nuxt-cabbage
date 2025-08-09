@@ -9,7 +9,7 @@
         height: 100%;
         overflow-y: scroll;
         position: absolute; 
-        background-color: var(--bg_2); 
+        background-color: var(--home_bg); 
         display: flex;
         justify-content: center;
         align-items: center;

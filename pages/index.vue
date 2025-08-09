@@ -53,6 +53,7 @@
              </div>
            </div>
           <GameCotent />
+          <LobbyFooter />
         </div>
       </section>
     </div>
@@ -83,7 +84,6 @@ useSeoMeta({
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 1rem;
   }
   .middle_route span {
     font-size: .7rem;
@@ -104,6 +104,7 @@ useSeoMeta({
     border: solid 1px var(--primary);
     color: var(--text_accent3);
     font-size: .8rem;
+    flex-shrink: 1;
   }
   .lobby_login_btn button:first-child {
     background-color:transparent;
@@ -123,7 +124,10 @@ useSeoMeta({
     bottom: 0;
   }
   .middle-right-nav {
+    justify-content: space-between;
     display: flex;
+    width: 50%;
+    max-width: 50%;
   }
   @media (width <= 450px) {
     .section-content {

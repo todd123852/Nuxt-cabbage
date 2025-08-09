@@ -2,7 +2,7 @@
     <div ref="gameContent" class="game-content" :style="{ '--header-height': headerHeight + 'px' }">
     <div class="side-sticky">
       <div class="side-nav-placeholder" :ref="(el) => { if (el) sideNavPlaceholderRef = el as HTMLElement }"></div>
-      <div class="side-nav" :class="{ 'is-fixed': isSideNavFixed }" :ref="(el) => { if (el) sideNavRef = el as HTMLElement }">
+      <div class="side-nav" :class="{ 'is-fixed': isSideNavFixed,'is-absolute': isSideNavabsoluted}" :ref="(el) => { if (el) sideNavRef = el as HTMLElement }">
         <div
           v-for="(game, index) in gameInfoStore.gameType"
           :key="game.type"
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { useGameInfo } from '~/stores/GameInfo'
 const gameInfoStore = useGameInfo();
-    
+    const isSideNavabsoluted = ref(false);
     const gameTabActive = ref(0);
     const gameTabs = ['热门', '最近', '收藏'];
     const gameRefs = ref<HTMLElement[]>([]);
@@ -164,19 +164,33 @@ onUnmounted(() => {
 
 // --- 滚动事件处理函数 ---
 const handleScroll = () => {    
-  if (!mainScrollContainer || !sideNavRef.value || !sideNavPlaceholderRef.value) {    
+  if (!mainScrollContainer || !sideNavRef.value || !sideNavPlaceholderRef.value
+    || !gameContent.value
+  ) {    
     return
   };
 
   const currentScrollTop = mainScrollContainer.value?.scrollTop|| 0;
+  const gameContentRect = gameContent.value.getBoundingClientRect();
 
   if (currentScrollTop >= stickyStartScrollTop) {
+    // 滑动到页脚之后往上移
+    if (currentScrollTop + gameContent.value.offsetTop > gameContentRect.height) {
+      isSideNavFixed.value = false;
+      sideNavRef.value.style.left = '0';
+      isSideNavabsoluted.value = true;
+      return
+    } else {
+      isSideNavabsoluted.value = false;
+    }
+    // 滑动未达页脚时固定
     if (!isSideNavFixed.value) {
-      isSideNavFixed.value = true;      
+      isSideNavFixed.value = true;   
       sideNavRef.value.style.left = `${fixedLeftOffset}px`;
       sideNavPlaceholderRef.value.classList.add('is-visible');
-      sideNavPlaceholderRef.value.style.height = `${sideNavRef.value.offsetHeight}px`; 
+      sideNavPlaceholderRef.value.style.height = `${sideNavRef.value.offsetHeight}px`;
     }
+    // 滑动到页脚之后往上移
   } else {
     // 尚未达到吸附点，或已向上滚动
     if (isSideNavFixed.value) {  
@@ -221,7 +235,10 @@ html {
       display: flex;
       height: 100%;
       width: 100%;
-      padding: .4rem 0;
+      /* padding-top: .4rem; */
+    }
+    .side-sticky {
+      position: relative;
     }
     .side-nav-placeholder {
       display: none; /* 默认隐藏 */
@@ -245,10 +262,16 @@ html {
       left: auto; 
       transition: top .4s ease;
     }
+    .side-nav.is-absolute {
+      position: absolute; 
+      bottom: 0;
+      left: 0; 
+      transition: top .4s ease;
+    }
     .side-nav .scroll-target {
       height: 5vh;
       width: 5.4rem;
-      background-color: #222222;
+      background-color: var(--web_left_bg_q);
       display: flex;
       align-items: center;
       word-wrap: break-word;
@@ -258,10 +281,13 @@ html {
       cursor: pointer;
       color: var(--neutral_1);
     }
+    .side-nav .scroll-target:last-child {
+      margin-bottom: 0;
+    }
         /* 侧边导航项的激活样式 */
     .side-nav .scroll-target.is-active {
-        background-color: #444444; /* 示例：更深的背景色 */
-        color: var(--highlight-color, #ffffff); /* 示例：高亮文字颜色 */
+      /* background-color: #444444;  */
+      color: var(--highlight-color, var(--lead)); /* 示例：高亮文字颜色 */
     }
 
     .nav-tittle {
@@ -278,13 +304,17 @@ html {
         color: var(--neutral_1);
     }
     .nav-icon {
-        flex-shrink: 0;
-        flex-basis: 1.7rem;
-        margin-right: .3rem;
-        width: 1.7rem;
+      flex-shrink: 0;
+      flex-basis: 1.7rem;
+      margin-right: .3rem;
+      width: 1.7rem;
     }
     .game-list-link {
-        scroll-margin-top: 12vh;
+      margin-bottom: 1rem;
+      scroll-margin-top: 12vh;
+    }
+    .game-list-link:last-child {
+      margin-bottom: 0;
     }
     .game-list {
         flex-grow: 1;
@@ -294,7 +324,7 @@ html {
         color: var(--lead);
         display: flex;
         justify-content: space-between;
-        padding: 1rem 0;
+        padding-top: 1rem;
     }
     .type-tittle {
         display: flex;
@@ -311,7 +341,7 @@ html {
       position: relative;
       height: 7.2rem;
       background-color: bisque;
-      margin-bottom: 1rem;
+      margin-top: 1rem;
       border-radius: .5rem;
     }
     .platformName {

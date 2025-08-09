@@ -8,7 +8,6 @@
     --border: #333333;
     --bg_1: #0A0A0A;
     --bg_2: #1A1A1A;
-    --bg_3: #1b1b1b;
     --accent_1: #04BE02;
     --accent_2: #EA4E3D;
     --accent_3: #FFAA09;
@@ -16,6 +15,8 @@
     --text_primary: #D1AE52;
     --text_accent3: #703904;
     --home_bg: #1A1A1A;
+    --web_left_bg_q: #232323;
+    --skin__web_btmnav_db: #0A0A0A;
 }
 :root:root {
     --van-popup-round-radius: 3%;
@@ -29,7 +30,7 @@
     --van-button-primary-background:var(--lead);
     --van-button-primary-border-color:var(--border);
     --van-button-radius : .4rem;
-    --van-tabs-bottom-bar-color:var(--text_primary);
+    --van-tabs-bottom-bar-color:var(--primary);
     --van-field-input-text-color:var(--lead);
     --van-field-icon-size:1.5rem;
     --van-field-word-limit-line-height:1.5rem;
@@ -37,7 +38,7 @@
     --van-field-label-margin-right:.5rem;
     --van-field-label-color:var(--lead);
     --van-cell-text-color:var(--lead);
-    --van-cell-background:var(--bg_2);
+    --van-cell-background:var(--home_bg);
     --van-padding-base:1rem;
     --van-cell-active-color:var(--bg_2);
     --van-cell-icon-size:1rem;
@@ -63,7 +64,18 @@
     --van-grid-item-content-padding: 0 .2rem;
     --van-popover-action-width:700px;
     --van-popover-action-height:800px;
+    /* 轻提示 */
+    --van-toast-background:var(--lead);
+    --van-toast-icon-size: 2rem ;
+    --van-toast-text-color: var(--home_bg);
+    --van-toast-font-size: 1rem;
+    --van-toast-line-height:1rem;
+    --van-toast-max-width: calc(100vh * 11 / 25);
+    --van-toast-default-width: 0;
+    --van-toast-default-min-height: 1rem;
+    --van-toast-radius: .7rem;
 }
+
 /* 分割细线 */
 .van-hairline--top::after {
     border-color: var(--neutral_1);
@@ -71,12 +83,20 @@
 .chargePop .van-tab {
     padding: 0;
 }
+.interest-content .van-tab {
+    justify-content: start;
+    flex: none;
+}
+.interest-content .van-tab span {
+    font-size: .9rem;
+}
 /* 导航Tab背景 */
 .van-tabs__nav--line {
     background-color: transparent;
+    padding-bottom: 1.2rem;
 }
 /* 导航文字高亮 */
-.van-tab--active {
+body .van-tab--active {
     color: var(--primary);
 }
 /* 充值按钮 */
@@ -87,7 +107,7 @@
     flex: 9;
 }
 button {
-    background-color: var(--text_primary);
+    background-color: var(--primary);
 }
 .app-container .van-icon-arrow-left {
     font-size: 1.3rem;
@@ -101,7 +121,7 @@ button {
     right: 0;
     height: 1px;
     width: 100%;
-    background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.192) 50.5%);
+    background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.233) 50.5%);
 }
 .my-hairline {
     position: relative;
@@ -159,4 +179,32 @@ button {
 .home-page .van-popup {
     border-radius: 4%;
     width: 20rem;
+}
+.profile-content .el-input .el-input__icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--neutral_2);
+    margin: 0;
+}
+.defaultBtn {
+    width: 4.5rem;
+    height: 1.8rem;
+    border-radius: .4rem;
+    margin-right: .5rem;
+    border: solid 1px var(--primary);
+    color: var(--text_accent3);
+    font-size: .8rem;
+    flex-shrink: 1;
+    cursor: pointer;
+}
+body .van-toast {
+    display: inline-flex;
+    padding: .7rem 2rem;
+}
+body .van-toast__text {
+    margin: 0;
+    margin-left: 1rem;
+}
+.van-toast__icon {
+    color: rgb(230 188 56);
 }

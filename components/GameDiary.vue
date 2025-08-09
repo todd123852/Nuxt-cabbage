@@ -13,7 +13,9 @@
         padding: .5rem;
         gap: .8rem;
     }
-    .game-option {}
+    .game-option {
+        
+    }
     .game-img {
         width: 100%;
         padding-bottom: 100%;

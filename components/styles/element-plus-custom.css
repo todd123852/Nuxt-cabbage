@@ -1,0 +1,61 @@
+/* Element 输入框样式 */
+.profileInput .el-input__wrapper, .profileInput .el-select__wrapper {
+    text-align: start;
+    background-color: var(--bg_2);
+    margin-top: .7rem;
+    box-shadow: none;
+    border: 1px solid var(--border);
+    padding: 0 .3rem;
+    font-size: .9rem;
+    text-align: start;
+}
+.profileInput .el-select {
+    padding: 0;
+}
+.profileInput .el-input__wrapper .el-input__inner {
+    color: var(--lead);
+    line-height: 1rem;
+    height: 2.6rem;
+}
+.profileInput .el-input__wrapper .el-input__inner::placeholder,
+.profileInput .el-select__placeholder.is-transparent {
+    color: var(--neutral_2);
+}
+.profileInput .el-input__wrapper:hover,
+.profileInput .el-select__wrapper.is-hovering:not(.is-focused) {
+    box-shadow: none;
+    border: 1px solid var(--border);
+}
+.profileInput .el-input__wrapper.is-focus, .profileInput .el-select__wrapper.is-focused {
+    box-shadow: none;
+    border: 1px solid var(--primary);
+}
+.profileInput .el-select__placeholder {
+    color: var(--lead);
+    text-align: left;
+}
+.profileInput .el-select__placeholder span {
+    font-size: .9rem;
+}
+body .el-select__wrapper {
+    min-height: 2.7rem;
+}
+.profileInput .el-select {
+
+}
+
+body .el-select__popper.el-popper {
+    background-color: var(--bg_2);
+    border-color: var(--border);
+}
+body .el-select__popper.el-popper li:hover,
+body .el-popper.is-light>.el-popper__arrow:before,
+body .el-select-dropdown__item.is-hovering {
+    background-color: var(--bg_2);
+}
+body .el-select-dropdown__item.is-selected {
+    color: var(--primary);
+}
+body .el-select__popper.el-popper .el-popper__arrow:before{
+    border-color: var(--border);
+}
