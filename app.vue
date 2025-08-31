@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="app-container" ref="appContainer">
-      <SideMenu />
+      <LazySideMenu />
+      <AppPop />
       <section>
         <NuxtLayout>
           <NuxtPage />
@@ -12,15 +13,17 @@
       </footer>
       <!-- 充值弹窗 -->
       <ChargePop />
+      <LoadingOverlay v-if="isLoading" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import '@vant/touch-emulator'; // vant的PC端点击事件
-const showChargeWindow = ref(true); // 固定窗口
+const showChargeWindow = ref(false); // 固定窗口
 const route = useRoute();
-const haveNavRoute = ['/', '/event', '/myInfo', '/login', '/event', '/interest'];
-
+const haveNavRoute = ['/', '/event', '/myInfo', '/event', '/interest'];
+const isLoading = ref(true)
+onMounted(() => isLoading.value = false)
 const haveFooter = computed(() => {
 if (!haveNavRoute.includes(route.path)) {
     return false;
@@ -41,6 +44,7 @@ if (!haveNavRoute.includes(route.path)) {
   scroll-behavior: smooth;
   text-decoration: none;
   cursor:default;
+  user-select: none;
 }
 input{
   text-align: start;

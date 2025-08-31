@@ -1,0 +1,66 @@
+.language_pop.van-popup {
+    padding: 0 3rem 3rem 3rem;
+    background-color: transparent;
+}
+.language-content {
+    color: var(--lead);
+    width: 100%;
+    border-radius: 1rem;
+}
+.languageMenu {
+    max-height: 20rem;
+    overflow-y: scroll;
+}
+.language-item {
+    padding: 0.1rem .8rem;
+    text-align: start;
+    line-height: 3rem;
+    margin: auto;
+    font-size: .5rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.language-tittle {
+    font-size: 1rem;
+    padding: 1rem 0;
+}
+.language-item span {
+    font-size: .8rem;
+    cursor: pointer;
+}
+.language-item .van-icon {
+    font-size: 1rem;
+    position: absolute;
+    right: .8rem;
+    top: 1rem;
+    cursor: pointer;
+    color: var(--primary);
+}
+.van-popup, .van-overlay{
+    width: calc(100vh * 11 / 19.5);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+.myInfo .van-popup {
+    background-color: transparent;
+    padding-bottom: 3.5rem;
+    color: var(--lead);
+}
+.language-content {
+    background-color: var(--bg_2);
+    border-radius: 5%;
+    border: solid 1px var(--border);
+}
+.close-dialog-Btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    font-size: 2rem;
+}
+.close-dialog-Btn .van-icon {
+    color: var(--lead);
+}

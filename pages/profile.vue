@@ -1,7 +1,7 @@
 <template>
     <div class="profile-content">
         <div class="profile-header">
-            <van-icon @click="navigateTo('/myInfo')" name="arrow-left"  />
+            <van-icon @click="useNavigationStore.routerBack" name="arrow-left"  />
             <span>个人资料</span>
         </div>
         <div class="profileBody">
@@ -50,12 +50,14 @@
             </div>
         </div>
         <div class="profile-footer">
-            <button @click="navigateTo('/myInfo')">上一页</button>
+            <button @click="useNavigationStore.routerBack">上一页</button>
             <button>保存</button>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+import { useNavigation } from '~/stores/Navigation';
+const useNavigationStore = useNavigation();
     definePageMeta({
         layout: 'mine',
     });

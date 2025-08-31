@@ -5,10 +5,11 @@
                 <div class="nav-header">
                     <div class="event-header-arrow">
                         <van-icon name="arrow-left"
-                        @click="() => navigateTo(layoutTransitionStore.fromPath)" />
+                        @click="useNavigationStore.routerBack" />
                     </div>
-                    <van-tabs v-model:active="eventPageStore.page" 
+                    <van-tabs :active="currentTab" 
                     :before-change="beforeChange"
+                    :ellipsis="false"
                     >
                         <van-tab 
                         v-for="type in discountTypes" 
@@ -28,18 +29,20 @@
 <script setup lang="ts">
 import { useLayoutTransitionStore } from '@/stores/layoutTransition'; 
 import { useEventPage } from '~/stores/EventPage';
+import { useNavigation } from '~/stores/Navigation';
+const useNavigationStore = useNavigation();
 const eventPageStore = useEventPage();
 const layoutTransitionStore = useLayoutTransitionStore();
-
+    const route = useRoute();
     const discountTypes = reactive([
         {name: '活动', route: '/event'},
         {name: '利息宝', route: '/interest'},
-        {name: '返水', route: '/interest'},
-        {name: '公积金', route: ''},
-        {name: '任务', route: ''},
-        {name: 'VIP', route: ''},
-        {name: '待领取', route: ''},
-        {name: '领取记录', route: ''},
+        // {name: '返水', route: '/interest'},
+        // {name: '公积金', route: ''},
+        // {name: '任务', route: ''},
+        // {name: 'VIP', route: ''},
+        // {name: '待领取', route: ''},
+        // {name: '领取记录', route: ''},
         {name: '自定义的看你想说什么', route: ''},
     ])
     const beforeChange = (index:number) => {
@@ -48,6 +51,12 @@ const layoutTransitionStore = useLayoutTransitionStore();
         // 返回 Promise 来执行异步逻辑
         return true
     }
+      // 控制TAB标签页
+    const currentTab = computed(() => {
+        const eventPath = route.path.split('/')[1];        
+        const pathIndex = discountTypes.findIndex((type, index) => type.route.includes(eventPath))
+        return pathIndex || 0
+    });    
     const active = ref(0)
 </script>
 <style scoped>

@@ -19,30 +19,33 @@ import icon_event from '~/components/imges/lobby_icon/icon_event.avif'
 import icon_desposit from '~/components/imges/lobby_icon/icon_desposit.avif'
 import icon_custom_service from '~/components/imges/lobby_icon/icon_custom_service.avif'
 import icon_downloadapp from '~/components/imges/lobby_icon/icon_downloadapp.avif'
-
 export const useLobby = defineStore('lobby', () => {
     const searchIcon = search_icon;
     const iconAll = icon_all;
     const lobbyNav = reactive([
-        {name: '推广赚钱',icon: dl_share, action: ''},
-        {name: '下载APP',icon: icon_downloadapp, action: ''},
-        {name: '客服中心',icon: icon_custom_service, action: ''},
-        {name: '充值',icon: icon_desposit, action: ''},
-        {name: '优惠中心',icon: icon_event, action: ''},
-        {name: 'VIP',icon: icon_vip, action: ''},
-        {name: '提现管理',icon: icon_withraw_card, action: ''},
-        {name: '安全设置',icon: icon_secrety, action: ''},
-        {name: '利息宝',icon: icon_pig, action: ''},
-        {name: '个人资料',icon: icon_personal_setting, action: ''},
-        {name: '提现',icon: icon_withdraw, action: ''},
-        {name: '投注记录',icon: icon_gamerecord, action: ''},
-        {name: '待领取',icon: icon_unrecieved, action: ''},
-        {name: '个人报表',icon: icon_report, action: ''},
-        {name: '任务',icon: icon_misssion, action: ''},
-        {name: '领取记录',icon: icon_recevied_record, action: ''},
-        {name: '投注任务',icon: icon_betting_misson, action: ''},
-        {name: '语言设置',icon: icon_langugue, action: ''},
-        {name: '帐户明细',icon: icon_transition_record, action: ''},
+        {name: '推广赚钱',icon: dl_share, key: ''},
+        {name: '下载APP',icon: icon_downloadapp, key: 'download'},
+        {name: '客服中心',icon: icon_custom_service, key: 'customService'},
+        {name: '充值',icon: icon_desposit, key: 'charge'},
+        {name: '优惠中心',icon: icon_event, key: 'event'},
+        {name: 'VIP',icon: icon_vip, key: ''},
+        {name: '提现管理',icon: icon_withraw_card, key: ''},
+        {name: '安全设置',icon: icon_secrety, key: ''},
+        {name: '利息宝',icon: icon_pig, key: ''},
+        {name: '个人资料',icon: icon_personal_setting, key: 'profile'},
+        {name: '提现',icon: icon_withdraw, key: ''},
+        {name: '投注记录',icon: icon_gamerecord, key: ''},
+        {name: '待领取',icon: icon_unrecieved, key: ''},
+        {name: '个人报表',icon: icon_report, key: ''},
+        {name: '任务',icon: icon_misssion, key: ''},
+        {name: '领取记录',icon: icon_recevied_record, key: ''},
+        {name: '投注任务',icon: icon_betting_misson, key: ''},
+        {name: '语言设置',icon: icon_langugue, key: 'language'},
+        {name: '帐户明细',icon: icon_transition_record, key: ''},
     ])
-    return {searchIcon, iconAll, lobbyNav}
+    const amount = useCookie<number>('amount', {
+        default: () => 0,
+        watch:true
+    })
+    return {searchIcon, iconAll, lobbyNav, amount}
 })

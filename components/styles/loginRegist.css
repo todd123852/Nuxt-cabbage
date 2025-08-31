@@ -1,0 +1,100 @@
+  main {
+    background-color: var(--bg_2);
+  }
+  main .bi {
+    height: 1.4rem;
+    margin-right: .5rem;
+  }
+  .loginRegistTab .el-input .el-input__password {
+    font-size: 1rem;
+  }
+  .loginTypeText{
+    text-align: start;
+  }
+  .el-input {
+    height: 2.7rem;
+  }
+  .contactTryPlay {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-around;
+    color: var(--primary);
+  }
+  .contactTryPlay span {
+    font-size: .8rem;
+    cursor: pointer;
+  }
+  .loginTypeText {
+    margin: .5rem 0;
+    color: var(--lead);
+    font-size: .8rem;
+  }
+  body .van-button {
+    background-color: var(--primary);
+    color: var(--text_accent3);
+    width: 100%;
+    height: 2.7rem;
+    border-radius: .6rem;
+    margin-right: .5rem;
+    font-size: 1rem;
+    flex-shrink: 1;
+    cursor: pointer;
+    margin-top: .7rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .van-button *{
+    text-align: center;
+  }
+  .input_place:nth-child(2) ~ .input_place:nth-child(n){
+    margin-top: .8rem;
+  }
+  .input_alert {
+    font-size: .8rem;
+    margin: .2rem 0;
+    display: flex;
+    align-items: center;
+    color: var(--accent_2);
+  }
+  .input_alert .bi {
+    height: 0.8rem;
+    width: 0.8rem;
+    margin: 0 .2rem;
+  } 
+  #rememberLoginAcc {
+    color: green;
+    margin-right: .3rem;
+  }
+  .remember {
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: var(--lead);
+    font-size: .8rem;
+  }
+  .remember span {
+    font-size: .8rem;
+  }
+  .thirdPartyLogin {
+    position: relative;
+    text-align: center;
+    color: var(--neutral_2);
+  }
+  .thirdPartyLogin span {
+    font-size: .9rem;
+  }
+  .thirdPartyLogin span::after, .thirdPartyLogin span::before {
+    position: absolute;
+    top: 50%;
+    width: 3rem;
+    height: .1rem;
+    background-color: var(--neutral_1);
+    transform: translateY(-50%);
+    content: "";
+  }
+  .thirdPartyLogin span::after {
+    right: 60%;
+  }
+  .thirdPartyLogin span::before {
+    left: 60%;
+  }

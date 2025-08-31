@@ -9,9 +9,11 @@ export default defineNuxtConfig({
     preset: 'github-pages'
   },
   css:[
+    'vant/lib/index.css',
+    '~/components/styles/vantCustomize.css',
     'element-plus/dist/index.css', 
     '~/components/styles/element-plus-custom.css',
-    '~/components/styles/vantCustomize.css',
+    'bootstrap-icons/font/bootstrap-icons.css'
   ],
   app: {
     baseURL: process.env.NUXT_APP_BASE_URL || '/',

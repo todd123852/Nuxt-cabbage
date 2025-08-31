@@ -3,7 +3,7 @@
         <img src="./imges/banner.png" alt="">
     </div>
 </template>
-<style>
+<style scoped>
     .banner-container {
         box-sizing: border-box;
         height: 15%;

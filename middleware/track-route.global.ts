@@ -1,7 +1,10 @@
 import { useLayoutTransitionStore } from '@/stores/layoutTransition'; 
+import { useLoginRegist } from '~/stores/loginRegist';
+import { useNavigation } from '~/stores/Navigation';
 // 定义布局/页面顺序
 const layoutsArray = ['/', '/event', '/regist', '/myInfo', '/login'];
 const eventPage = ['/event', '/interest', '', '', '', '', ];
+const pages = ['', 'event', 'regist', 'myInfo', 'login', 'center-wallet', 'mission', 'interest', 'profile', 'rebate', 'report', 'vip']
 // 计算路径深度
 // function getPathDepth(path: string): number {
 //   return path.split('/').filter(segment => segment.length > 0).length;
@@ -10,6 +13,27 @@ export default defineNuxtRouteMiddleware((to, from) => {
   let transitionName: 'slide-forward' | 'slide-backward';
   const toPath = to.fullPath;
   const fromPath = from.fullPath;
+
+  // 记录路由历史记录
+  const useNavigationStore = useNavigation();
+  // 如果后缀名不在所有页面哩，返回首页
+  if (!pages.includes(toPath.split('/')[1])) {
+    useNavigationStore.history.length = 0;
+    return navigateTo('/')
+  }
+
+  // 如果已登陆还进入登录页，跳回首页
+  const useloginRegistStore = useLoginRegist(); 
+  if (to.path.includes('login') || to.path.includes('regist')) {
+    if (useloginRegistStore.isLogin) {  
+      useNavigationStore.history.length = 0;
+      return navigateTo('/')
+    }
+  }
+  if (useNavigationStore.history.length === 0) {
+    useNavigationStore.history.push(fromPath);
+  }
+  useNavigationStore.history.push(toPath);
 
   const layoutTransitionStore = useLayoutTransitionStore();
   layoutTransitionStore.fromPath = from.fullPath;
@@ -21,12 +45,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
     toIndex = eventPage.indexOf(toPath);
     fromIndex = eventPage.indexOf(fromPath);
 
-  }
-  console.log(toIndex>fromIndex);
-  
+  }  
   if (fromPath === '/' || fromPath === toPath || fromIndex === -1 || toIndex === -1) {
-    // console.log('fromIndex: '+fromIndex);
-    // console.log('toIndex: '+toIndex);
     transitionName = 'slide-forward'; // 默认前进
   } else {
     // 2. 根据索引比较判断方向

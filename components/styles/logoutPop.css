@@ -1,0 +1,44 @@
+.logout_pop.van-popup {
+    padding: 0 3rem 3rem 3rem;
+    background-color: transparent;
+    color: var(--lead);
+}
+.logout_pop-content {
+    color: var(--lead);
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    background: var(--bg_2);
+}
+
+.logout_pop_tittle {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+.logout_pop_text {
+    height: 4rem;
+    text-align: center;
+}
+.logout_pop_text p {
+    font-size: .8rem;
+}
+.logout_pop_btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.logout_pop_btn button {
+    width: 9rem;
+    height: 2.5rem;
+    border-radius: .4rem;
+    margin-right: .5rem;
+    border: solid 1px var(--primary);
+    color: var(--text_accent3);
+    font-size: .8rem;
+    flex-shrink: 1;
+    cursor: pointer;
+}
+.logout_pop_btn button:first-child {
+    background-color:transparent;
+    color: var(--primary);
+}

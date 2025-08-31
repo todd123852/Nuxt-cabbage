@@ -13,18 +13,23 @@
             </template>
            </van-notice-bar>
            <div class="lobby_nav-container">
-             <div class="lobby_login_btn">
-                <button>登陆</button>
-                <button>注册</button>
+             <div class="lobby_login_btn" v-if="!useLoginRegistStore.isLogin">
+                <button @click="()=>navigateTo('/login')">登陆</button>
+                <button @click="()=>navigateTo('/regist')">注册</button>
+             </div>
+             <div class="accoutInfo" v-else>
+              <DisplayInfo />
              </div>
              <div class="middle-right-nav">
-               <div class="middle_route" v-for="nav in lobbyStore.lobbyNav.slice(0, 3)">
+               <div class="middle_route" v-for="nav in lobbyStore.lobbyNav.slice(0, 3)"
+                @click="navAction(nav.key)"
+               >
                   <img :src="nav.icon" alt="">
                   <span>{{ nav.name }}</span>
                 </div>
                <!-- 中部导航 -->
                <van-popover 
-               v-model:show="showPopover" 
+               v-model:show="usePopoverCloseStore.middleNavPopover" 
                placement="bottom-end"
                style="border: 1px solid var(--border);"
                >
@@ -37,10 +42,10 @@
                 >
                 <van-grid-item
                   v-for="opition in lobbyStore.lobbyNav"
-                  :key="opition.name"
+                  :key="opition.key"
                   :text="opition.name"
                   :icon="opition.icon"
-                  @click="showPopover = false"
+                  @click="navAction(opition.key)"
                 />
                 </van-grid>
                 <template #reference>
@@ -61,9 +66,57 @@
 </template>
 <script setup lang="ts">
 import { useLobby } from '@/stores/Lobby';
+import { useLobbyPop } from '~/stores/lobbyPop';
+import { usePopup } from '~/stores/Popup';
+import { useLoginRegist } from '~/stores/loginRegist';
+import { usePopoverClose } from '~/stores/PopoverClose';
+const usePopoverCloseStore = usePopoverClose();
+const useLoginRegistStore = useLoginRegist()
+const usePopupStore = usePopup()
+const useLobbyPopStore = useLobbyPop();
 const lobbyStore = useLobby();
-const showPopover = ref(false);
-
+function navAction(navKey:string) {
+  switch (navKey) {
+    case 'download':      
+      useLobbyPopStore.downloadPop = true;
+      break;
+    case 'customService':      
+      window.open('https://t.me/mmisharkk', '_blank', 'noopener,noreferrer')
+      break;
+    case 'profile':      
+      navigateTo('/profile');
+      break;
+    case 'event':      
+      navigateTo('/event');
+      break;
+    case 'charge':      
+      usePopupStore.chargePop = true
+      break;
+    case 'language':
+      console.log(123);
+            
+      useLobbyPopStore.languagePop = true
+      break;
+    // case '':      
+      
+    //   break;    
+    // case '':      
+      
+    //   break;
+    // case '':      
+      
+    //   break;
+    // case '':      
+      
+    //   break;    
+    // case '':      
+      
+    //   break;
+    default:
+      break;
+  }
+  usePopoverCloseStore.middleNavPopover = false
+}
 definePageMeta({
   layout: 'default',
 });

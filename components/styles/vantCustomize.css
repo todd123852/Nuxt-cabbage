@@ -38,9 +38,9 @@
     --van-field-label-margin-right:.5rem;
     --van-field-label-color:var(--lead);
     --van-cell-text-color:var(--lead);
-    --van-cell-background:var(--home_bg);
+    --van-cell-background:transparent;
     --van-padding-base:1rem;
-    --van-cell-active-color:var(--bg_2);
+    --van-cell-active-color:transparent;
     --van-cell-icon-size:1rem;
     --van-cell-line-height:2rem;
     --van-cell-vertical-padding:1rem;
@@ -71,14 +71,14 @@
     --van-toast-font-size: 1rem;
     --van-toast-line-height:1rem;
     --van-toast-max-width: calc(100vh * 11 / 25);
-    --van-toast-default-width: 0;
+    /* --van-toast-default-width: auto; */
     --van-toast-default-min-height: 1rem;
     --van-toast-radius: .7rem;
 }
 
 /* 分割细线 */
 .van-hairline--top::after {
-    border-color: var(--neutral_1);
+    border-color: var(--border);
 }
 .chargePop .van-tab {
     padding: 0;
@@ -116,12 +116,12 @@ button {
 .my-hairline::after{
     content: '';
     position: absolute;
-    bottom: 0;
     left: 0;
-    right: 0;
-    height: 1px;
+    bottom: 0;
     width: 100%;
-    background: linear-gradient(to bottom, transparent 49.5%, rgba(255, 255, 255, 0.233) 50.5%);
+    height: 1px;
+    background-color: var(--neutral_3); /* 使用一个你想要的纯色 */
+    transform: scaleY(0.5)
 }
 .my-hairline {
     position: relative;
@@ -198,13 +198,21 @@ button {
     cursor: pointer;
 }
 body .van-toast {
-    display: inline-flex;
-    padding: .7rem 2rem;
+    display: flex;
+    flex-direction: row;
+    padding: .7rem 2.5rem;
 }
 body .van-toast__text {
     margin: 0;
     margin-left: 1rem;
+    white-space: nowrap;
 }
-.van-toast__icon {
+.van-icon-warning {
     color: rgb(230 188 56);
+}
+.van-icon-checked {
+    color: var(--accent_1);
+}
+.van-icon-clear {
+    color: var(--accent_2);
 }

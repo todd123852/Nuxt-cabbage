@@ -1,4 +1,14 @@
 /* Element 输入框样式 */
+:root {
+    --el-input-focus-border: var(--primary)
+}
+body .el-input {
+    --el-input-focus-border: var(--primary);
+    --el-input-focus-border-color:var(--primary);
+    --el-input-border-color:var(--border);
+    --el-input-hover-border-color: var(--border);
+    --el-input-bg-color: transparent;
+}
 .profileInput .el-input__wrapper, .profileInput .el-select__wrapper {
     text-align: start;
     background-color: var(--bg_2);
@@ -58,4 +68,18 @@ body .el-select-dropdown__item.is-selected {
 }
 body .el-select__popper.el-popper .el-popper__arrow:before{
     border-color: var(--border);
+}
+body .el-icon svg {
+    height: 6rem;
+    width: 6rem;
+}
+body .el-input:focus {
+    border-color: var(--neutral_2);
+}
+body .el-input__inner {
+    color: var(--lead);
+    font-size: .8rem;
+}
+body .el-input__inner::placeholder {
+    color: var(--neutral_2);
 }

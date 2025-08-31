@@ -34,6 +34,8 @@
 <script setup lang="ts">
   import searchIcon from '@/components/imges/lobby_icon/search_icon.avif'
   import { useGameInfo } from '~/stores/GameInfo'
+  import { usePopoverClose } from '~/stores/PopoverClose';
+  const usePopoverCloseStore = usePopoverClose();
   const gameInfoStore = useGameInfo();
   const headerElement = ref<HTMLElement | null>(null);
   const defaultScrollElement = ref<HTMLElement | null>(null);
@@ -76,8 +78,11 @@
   // 置顶方法
   const showBackTop = ref(false); // 展示置顶图标
   const scrollTop = ref(0); 
+  // 滚动时测量高度，并将popover关闭
   const handleScroll = () => {
     scrollTop.value = defaultScrollElement.value?.scrollTop || 0;
+    usePopoverCloseStore.displayAccountPopover = false;
+    usePopoverCloseStore.middleNavPopover = false;
   };
   onMounted(() => defaultScrollElement.value?.addEventListener('scroll', handleScroll)); // 监听滚动
   watch(scrollTop, () => 

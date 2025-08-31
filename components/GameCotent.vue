@@ -19,6 +19,7 @@
       </div>
     </div>
     <div class="game-list">
+      <div class="my-hairline tab"></div>
       <van-tabs 
         v-model:active="gameTabActive" 
         id="gameTabs" 
@@ -289,7 +290,11 @@ html {
       /* background-color: #444444;  */
       color: var(--highlight-color, var(--lead)); /* 示例：高亮文字颜色 */
     }
-
+    .my-hairline.tab {
+      position: absolute;
+      width: 100%;
+      top: 3.3rem;
+    }
     .nav-tittle {
         flex-grow: 1;
         display: flex;
@@ -317,8 +322,9 @@ html {
       margin-bottom: 0;
     }
     .game-list {
-        flex-grow: 1;
-        margin: 0;
+      position: relative;
+      flex-grow: 1;
+      margin: 0;
     }
     .type-head {
         color: var(--lead);

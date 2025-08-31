@@ -4,7 +4,7 @@
             <header>
                 <div class="header-item">
                     <van-icon name="arrow-left" 
-                    @click="() => navigateTo(layoutTransitionStore.fromPath)" 
+                    @click="useNavigationStore.routerBack" 
                     />
                     <div class="head-nav">
                         <div class="btnContainer" 
@@ -18,19 +18,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="memberInfo">
+                <div class="afterLoginContent" v-if="useLoginRegistStore.isLogin">
+                    <div class="userAvator" :style="{backgroundImage:`url(${avator1})`}"
+                    @click="navigateTo('/profile')"
+                    >
+                    </div>
+                    <DisplayInfo />
+                </div>
+                <div class="beforeLoginContent" v-else>
                     <div class="visitorAvator"
                     :style="{ backgroundImage: `url(${visitorImg})` }"
                     ></div>
                     <div class="login_regist_link">
                         <span>请先</span>
-                        <NuxtLink>登录</NuxtLink>
+                        <NuxtLink to="/login">登录</NuxtLink>
                         <span>或</span>
-                        <NuxtLink>注册</NuxtLink>
+                        <NuxtLink to="/regist">注册</NuxtLink>
                     </div>
                     <div class="login_regist_btn">
-                        <button>登陆</button>
-                        <button>注册</button>
+                        <button @click="()=>navigateTo('/login')">登陆</button>
+                        <button @click="()=>navigateTo('/regist')">注册</button>
                     </div>
                 </div>
             </header>
@@ -44,7 +51,7 @@
                         <p>{{ nav.name }}</p>
                     </nav>
                 </div>
-                <div class="vipContainer" v-if="true">
+                <div class="vipContainer" v-if="useLoginRegistStore.isLogin">
                     <div class="vipHead">
                         <span>距离<i>VIP1</i>还需投注<b>2.00</b></span>
                         <van-icon name="arrow-right"  />
@@ -58,40 +65,15 @@
                 <div class="menuList">
                     <van-cell
                     class="menu-nav"
-                    v-for="li in menu" :key="li.name"
+                    v-for="li in menu.slice(0, menuWithOrWithoutLogout)" :key="li.name"
                     :border="false"
                     :title="li.name" 
                     icon="location-o" 
                     arrow-direction="right"
                     @click="li.action ? li.action() : null;"
                     is-link
-                    >{{  }}</van-cell>
+                    ></van-cell>
                 </div>
-                <!-- 语言选择弹窗 -->
-                <van-popup 
-                v-model:show="editLanguage" 
-                :close-on-click-overlay="false"
-                ref="languagePop"
-                >
-                    <div class="language-content">
-                        <p class="language-tittle">选择语言</p>
-                        <div class="my-hairline"></div>
-                        <div v-for="(language, index) in languges" :key="language" 
-                        class="language-item"
-                        @click="activeLanguge = language"
-                        >
-                            <span>{{ language }}</span>
-                            <van-icon name="circle" v-if="language !== activeLanguge" />
-                            <van-icon name="checked" v-else="language === activeLanguge" />
-                            <div>
-                                <div class="my-hairline" v-if="index !== languges.length - 1"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="close-dialog-Btn">
-                        <van-icon name="close" @click="editLanguage = false" />
-                    </div>
-                </van-popup>
             </main>
         </section>
     </div>
@@ -100,19 +82,22 @@
 import { usePopup } from '@/stores/Popup';
 import { useLayoutTransitionStore } from '@/stores/layoutTransition';
 import { useEventPage } from '~/stores/EventPage';
+import { useLobbyPop } from '#imports';
+import { useLoginRegist } from '~/stores/loginRegist';
+import { useNavigation } from '~/stores/Navigation';
 import visitorImg from '@/components/imges/visitor_avator.avif'
 import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
+import avator1 from '~/components/imges/avators/avator1.png'
+    const useNavigationStore = useNavigation();
+    const useLobbyPopStore = useLobbyPop();
+    const useLoginRegistStore = useLoginRegist();
     const layoutTransitionStore = useLayoutTransitionStore();
-    const editLanguage = ref(false); // 语言弹窗开关
-    const languagePop = ref<HTMLElement | null>(null);
     const popupStore = usePopup();
     const eventPageStore = useEventPage();
+    const router = useRouter();
     definePageMeta({
         layout: 'mine', 
     });
-    const showLanguagePop = () => {
-        editLanguage.value = true;        
-    };
     const chargeAction = () => popupStore.chargePop = true;
     const providentFund = () => {
         eventPageStore.page = 1;
@@ -126,14 +111,15 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         {name: '利息宝', icon: 'discount', action: providentFund},
     ])
     const profileSetting = () => navigateTo('/profile')
+    const contactService = () => window.open('https://t.me/mmisharkk', '_blank', 'noopener,noreferrer')
     const headerItem = [
-        {name:'客服', icon:'service', badge: '2', action: ''},
+        {name:'客服', icon:'service', badge: '2', action: contactService},
         {name:'消息中心', icon:'chat-o', badge: '99+', action: ''},
         {name:'个人资料', icon:'user', badge: '', action: profileSetting},
     ];
-    const languges = reactive(['繁体中文', '简体中文', 'Chinese', 'Mandarin']);
-    const activeLanguge = ref(languges[0])
     const toWallet = () => navigateTo('/center-wallet');
+    const selectLanguge = () => useLobbyPopStore.languagePop = true;
+    const signout = () => useLobbyPopStore.logoutPop = true;
     const menu = reactive([
         {name: '找回余额', action: toWallet},
         {name: '账户明细', to: ''},
@@ -146,13 +132,14 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         {name: '个人资料', to: ''},
         {name: '安全中心', to: ''},
         {name: '找到我们', to: ''},
-        {name: '选择语言', to: '', action: showLanguagePop},
+        {name: '选择语言', to: '', action: selectLanguge},
         {name: '常见问题', to: ''},
         {name: '有奖反馈', to: ''},
         {name: '登陆设备', to: ''},
         {name: '关于我们', to: ''},
-        {name: '安全退出', to: ''},
+        {name: '安全退出', to: '', action: signout},
     ])
+    const menuWithOrWithoutLogout = computed(() => useLoginRegistStore.isLogin ? menu.length : -1)
 </script>
 <style scoped>
     .myInfo {
@@ -160,7 +147,7 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         height: 100vh;
         position: relative;
         background-color: var(--home_bg);
-        background-size: 100%;
+        background-size: 100% 35%;
         background-repeat: no-repeat;
         padding: 0 1rem;
     }
@@ -214,7 +201,7 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         border-radius: 10%;
         background-size: 100%;
     }
-    .memberInfo {
+    .beforeLoginContent {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -280,7 +267,7 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
         width: 3rem;
     }
     .menuList {
-        background-color: var(--home_bg);
+        background-color: transparent;
         color: var(--lead);
     }
     .menu-nav {
@@ -289,70 +276,17 @@ import lobby_Img from '@/components/imges/style_1_topbg_yd.avif'
     .btnContainer p{
         font-size: 0.6rem;
     }
-    .myInfo .van-popup {
-        color: var(--lead);
-        width: 21.5rem;
-        border-radius: 1rem;
+
+    .userAvator {
+        border-radius: 100%;
+        width: 3rem;
+        height: 3rem;
+        background-size: 100%;
+        background-color: aliceblue;
+        margin-right: 1rem;
     }
-    #close-1anguage-popup {
-        position: fixed;
-        color: var(--lead);
-        left: 0;
-        right: 0;
-        bottom: 28%;
-        cursor: pointer;
-        font-size: 2rem;
-        z-index: 3333;
-    }
-    .language-item {
-        padding: 0.1rem .8rem;
-        text-align: start;
-        line-height: 3rem;
-        margin: auto;
-        font-size: .5rem;
-        position: relative;
-        cursor: pointer;
-    }
-    .language-tittle {
-        font-size: 1rem;
-        padding: 1rem 0;
-    }
-    .language-item span {
-        font-size: .8rem;
-        cursor: pointer;
-    }
-    .language-item .van-icon {
-        font-size: 1rem;
-        position: absolute;
-        right: .8rem;
-        top: 1rem;
-        cursor: pointer;
-    }
-    .van-popup, .van-overlay{
-        width: calc(100vh * 11 / 19.5);
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-    }
-    .myInfo .van-popup {
-        background-color: transparent;
-        padding-bottom: 3.5rem;
-        color: var(--lead);
-    }
-    .language-content {
-        background-color: var(--bg_2);
-        border-radius: 5%;
-        border: solid 1px var(--border);
-    }
-    .close-dialog-Btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: 0 auto;
-        font-size: 2rem;
-    }
-    .close-dialog-Btn .van-icon {
-        color: var(--lead);
+    .afterLoginContent {
+        display: flex;
+        margin-bottom: 1rem;
     }
 </style>
