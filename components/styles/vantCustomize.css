@@ -71,7 +71,7 @@
     --van-toast-font-size: 1rem;
     --van-toast-line-height:1rem;
     --van-toast-max-width: calc(100vh * 11 / 25);
-    /* --van-toast-default-width: auto; */
+    --van-toast-default-width: fit-content;
     --van-toast-default-min-height: 1rem;
     --van-toast-radius: .7rem;
 }
@@ -205,7 +205,6 @@ body .van-toast {
 body .van-toast__text {
     margin: 0;
     margin-left: 1rem;
-    white-space: nowrap;
 }
 .van-icon-warning {
     color: rgb(230 188 56);
