@@ -1,1 +1,0 @@
-import{_ as n,c as t,o,ax as s}from"./BoWfHopn.js";const c={},a={class:"mine-container"};function r(e,d){return o(),t("div",a,[s(e.$slots,"default",{},void 0,!0)])}const i=n(c,[["render",r],["__scopeId","data-v-b8d75209"]]);export{i as default};
