@@ -4,7 +4,7 @@
             <header>
                 <div class="header-item">
                     <van-icon name="arrow-left" 
-                    @click="useNavigationStore.routerBack" 
+                    @click="useNavigationStore.routerBack()" 
                     />
                     <div class="head-nav">
                         <div class="btnContainer" 

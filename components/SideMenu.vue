@@ -3,31 +3,45 @@
         <input type="checkbox" id="sideMenu-switch">
         <div class="mainside">
             <!-- 放置侧边栏元素 -->
-             <p class="menuTittle">主题样式: </p>
-             <div class="themeBtns">
-                 <button v-for="(theme, index) in themeStore.themes" 
-                 :key="theme.themeName" 
-                 @click="handleChangeSkin(index)"
-                 :class="['skinBtn', { 'activeSkinBtn': skin === theme.themeName }]"
-                 :style="{
-                    'color': skin === theme.themeName ? theme.themeCss.lead : theme.themeCss.bg_1, 
-                    borderColor: theme.themeCss.bg_1,
-                    'backgroundColor': skin === theme.themeName ? theme.themeCss.bg_1 : theme.themeCss.lead
-                }"
-                 >
-                    {{ theme.themeName }}
-                </button>
+             <!-- 皮肤设置 -->
+             <div class="themeSetting">
+                 <p class="menuTittle">主题样式: </p>
+                 <div class="themeBtns">
+                     <button v-for="(theme, index) in themeStore.themes" 
+                     :key="theme.themeName" 
+                     @click="handleChangeSkin(index)"
+                     :class="['skinBtn', { 'activeSkinBtn': skin === theme.themeName }]"
+                     :style="{
+                        'color': skin === theme.themeName ? theme.themeCss.lead : theme.themeCss.bg_1, 
+                        borderColor: theme.themeCss.bg_1,
+                        'backgroundColor': skin === theme.themeName ? theme.themeCss.bg_1 : theme.themeCss.lead
+                    }"
+                     >
+                        {{ theme.themeName }}
+                    </button>
+                 </div>
+                <label for="sideMenu-switch" class="switch_label">
+                <div class="arrow">
+                    <i class="bi bi-caret-left"></i>
+                </div>
+                </label>
              </div>
-            <label for="sideMenu-switch" class="switch_label">
-            <div class="arrow">
-                <i class="bi bi-caret-left"></i>
-            </div>
-            </label>
+             <div class="amountSetting">
+                <p class="menuTittle">账户余额: </p>
+                <van-stepper 
+                v-model.number="useLobbyStore.amount" min="0" max="999999999" 
+                :default-value="0"
+                :decimal-length="2"
+                input-width="70%"
+                />
+             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
     import { useTheme } from '~/stores/Theme';
+    import { useLobby } from '~/stores/Lobby';
+    const useLobbyStore = useLobby();
     const themeStore = useTheme();
     const skin = ref('深色黑金');
     const handleChangeSkin = (index:number) => {
@@ -99,5 +113,14 @@
         font-size: 1.5rem;
         text-align: left;
         font-weight: 600;
+    }
+    .amountSetting {
+        text-align: start;
+
+    }
+    @media (width < 756px){
+        .sideOffice {
+            display: none;
+        }
     }
 </style>

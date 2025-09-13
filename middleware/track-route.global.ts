@@ -5,10 +5,6 @@ import { useNavigation } from '~/stores/Navigation';
 const layoutsArray = ['/', '/event', '/regist', '/myInfo', '/login'];
 const eventPage = ['/event', '/interest', '', '', '', '', ];
 const pages = ['', 'event', 'regist', 'myInfo', 'login', 'center-wallet', 'mission', 'interest', 'profile', 'rebate', 'report', 'vip']
-// 计算路径深度
-// function getPathDepth(path: string): number {
-//   return path.split('/').filter(segment => segment.length > 0).length;
-// }
 export default defineNuxtRouteMiddleware((to, from) => {
   let transitionName: 'slide-forward' | 'slide-backward';
   const toPath = to.fullPath;
@@ -30,13 +26,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return navigateTo('/')
     }
   }
-  if (useNavigationStore.history.length === 0) {
-    useNavigationStore.history.push(fromPath);
-  }
-  useNavigationStore.history.push(toPath);
-
-  const layoutTransitionStore = useLayoutTransitionStore();
-  layoutTransitionStore.fromPath = from.fullPath;
+  useNavigationStore.saveHistory(toPath);
   
   let toIndex = layoutsArray.indexOf(toPath);
   let fromIndex = layoutsArray.indexOf(fromPath);
@@ -44,8 +34,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (eventPage.includes(toPath) && eventPage.includes(fromPath)) {
     toIndex = eventPage.indexOf(toPath);
     fromIndex = eventPage.indexOf(fromPath);
-
-  }  
+  }
   if (fromPath === '/' || fromPath === toPath || fromIndex === -1 || toIndex === -1) {
     transitionName = 'slide-forward'; // 默认前进
   } else {
@@ -56,16 +45,19 @@ export default defineNuxtRouteMiddleware((to, from) => {
       transitionName = 'slide-backward'; // 目标索引小于来源索引，后退
     }
   }
-  to.meta.pageTransition = {
-    name: transitionName,
-  };
-  from.meta.pageTransition = {
-    name: transitionName,
-  };
-  to.meta.layoutTransition = {
-    name: transitionName,
-  };
+  to.meta.pageTransition = 
+  from.meta.pageTransition = 
+  to.meta.layoutTransition = 
   from.meta.layoutTransition = {
     name: transitionName,
   };
+  // from.meta.pageTransition = {
+  //   name: transitionName,
+  // };
+  // to.meta.layoutTransition = {
+  //   name: transitionName,
+  // };
+  // from.meta.layoutTransition = {
+  //   name: transitionName,
+  // };
 })

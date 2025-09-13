@@ -46,6 +46,7 @@
     --van-cell-vertical-padding:1rem;
     --van-cell-horizontal-padding: 0;
     --van-tabs-nav-background: transparent;
+    --van-field-placeholder-text-color: var(--neutral_3);
     /* 跑马灯样式 */
     --van-notice-bar-height:3rem;
     --van-notice-bar-line-height:0;
@@ -74,6 +75,10 @@
     --van-toast-default-width: fit-content;
     --van-toast-default-min-height: 1rem;
     --van-toast-radius: .7rem;
+    /* 步进器 */
+    --van-stepper-background:var(--bg_2);
+    --van-stepper-button-icon-color:var(--primary);
+    --van-stepper-input-text-color:var(--accent_3);
 }
 
 /* 分割细线 */
@@ -126,12 +131,9 @@ button {
 .my-hairline {
     position: relative;
 }
-.van-icon__image {
+body .van-icon__image {
     width: 1.5em;
     height: 1.5em;
-}
-.van-field__control::placeholder {
-    color: var(--neutral_2);
 }
 .van-field__label {
     font-size: 1rem;

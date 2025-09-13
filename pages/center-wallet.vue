@@ -1,7 +1,7 @@
 <template>
     <div class="center-wallet">
         <div class="walletHeader">
-            <van-icon @click="navigateTo('/myInfo')" name="arrow-left"  />
+            <van-icon @click="useNavigationStore.routerBack" name="arrow-left"  />
             找回余额
         </div>
         <div class="walletBody">
@@ -68,6 +68,8 @@
 </template>
 <script setup lang="ts">
 import { useGameInfo } from '~/stores/GameInfo'
+import { useNavigation } from '~/stores/Navigation';
+const useNavigationStore = useNavigation();
 const gameInfoStore = useGameInfo();
 
     definePageMeta({

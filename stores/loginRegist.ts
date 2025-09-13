@@ -1,3 +1,4 @@
+import { tr } from "element-plus/es/locale/index.mjs";
 import { useLobby } from "~/stores/Lobby";
 export const useLoginRegist = defineStore('loginRegist', () => {
     const passwordReg= /^[a-zA-Z0-9~!@$*^]{8,16}$/;

@@ -27,9 +27,13 @@
                 <i class="bi bi-copy"></i>
             </div>
         </div>
-        <div class="displayAmount" :style="{maxWidth:displayAmountWidth + 'px'}">
+        <div class="displayAmount">
             <img :src="cny" alt="">
-            <NuxtLink class="amount" ref="amountText">{{ freshingAmount ? '加载中' : useLobbyStore.amount.toFixed(2) }}</NuxtLink>
+            <NuxtLink 
+            class="amount" 
+            to="/center-wallet"
+            >{{ freshingAmount ? '加载中' : useLobbyStore.amount.toFixed(2) }}
+            </NuxtLink>
             <div class="fresh" :class="{freshing: freshingAmount}" @click="refreshAmount">
                 <i class="bi bi-arrow-repeat"></i>
             </div>
@@ -46,12 +50,6 @@ import cny from '~/components/imges/currencyIcon/CNY.jpg'
     const useLobbyStore = useLobby();
     const freshingAmount = ref<boolean>(false);
     const activeDisplayItem = ref<number>(0);
-    const amountText = ref(null);
-    // 计算展示金额的宽度
-    const displayAmountWidth = ref(20);
-    onMounted(() => {
-        displayAmountWidth.value = (window.innerHeight*2*(String(useLobbyStore.amount).length + 5)) / 100
-    })
     const refreshAmount = () => {
         try {
             freshingAmount.value = true;
@@ -90,12 +88,13 @@ import cny from '~/components/imges/currencyIcon/CNY.jpg'
         position: relative;
         display: flex;
         flex-direction: column;
+        align-items: start;
     }
     .displayAccount, .displayAmount{
         color: var(--border);
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        min-width: 0;
     }
 
     .infoItem {
@@ -177,10 +176,14 @@ import cny from '~/components/imges/currencyIcon/CNY.jpg'
     }
     .amount {
         font-size: 1rem;
+        color: var(--accent_3);
         text-decoration: underline;
+        margin: 0 .2rem;
+        cursor: pointer;
     }
     .fresh .bi{
         font-size: 1.3rem;
+        cursor: pointer;
     }
     .freshing {
         animation: spin .2s infinite;

@@ -1,8 +1,12 @@
 <template>
-    <div class="mine-container">
+    <div class="mine-container" @scroll="usePopoverCloseStore.displayAccountPopover = false">
         <slot></slot>
     </div>
 </template>
+<script setup lang="ts">
+    import { usePopoverClose } from '~/stores/PopoverClose';
+    const usePopoverCloseStore = usePopoverClose();
+</script>
 <style scoped>
     .mine-container {
         width: 100%;
