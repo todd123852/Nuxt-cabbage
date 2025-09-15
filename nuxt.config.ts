@@ -24,7 +24,13 @@ export default defineNuxtConfig({
       },
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
+        { name: 'siteinfos', content: '{"ossBaseUrl":"/"}' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black' },
+        { name: 'google', content: 'notranslate' },
+        { property: 'twitter:card', content: 'summary_large_image' },
         { name: 'description', content: '' },
         { name: 'format-detection', content: 'telephone=no' }
       ],
