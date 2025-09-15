@@ -1,0 +1,1 @@
+import{s as o,r as e}from"#entry";const i=o("layoutTransition",()=>{const t=e("forward"),n=e("");function r(a){t.value=a}return{direction:t,setDirection:r,fromPath:n}}),u=o("EventPage",()=>({page:e(1)}));export{u as a,i as u};

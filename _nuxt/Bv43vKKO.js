@@ -1,1 +1,0 @@
-import{_ as n,c as t,o,ar as s}from"./Dpf0kvGp.js";const c={},r={class:"mine-container"};function a(e,d){return o(),t("div",r,[s(e.$slots,"default",{},void 0,!0)])}const i=n(c,[["render",a],["__scopeId","data-v-b8d75209"]]);export{i as default};
