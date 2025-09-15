@@ -4,7 +4,7 @@
             <!-- 底部导航 -->
             <van-tabbar route :border="false">
                 <van-tabbar-item 
-                v-for="nav in navData"
+                v-for="nav in navs"
                 :key="nav.name"
                 :to="nav.url" 
                 :icon="nav.icon"
@@ -17,6 +17,8 @@
 </template>
 <script setup>
 import { usePopup } from '@/stores/Popup';
+import { useLoginRegist } from '@/stores/loginRegist';
+const useLoginRegistStore = useLoginRegist();
 const popupStore = usePopup();
     function showWindow(open) {
         if (open) {
@@ -30,6 +32,12 @@ const popupStore = usePopup();
         {logoImg: 22, url: '/regist', name: '注册', icon: 'friends', charge: false},
         {logoImg: 33, url: '/myInfo', name: '我的', icon: 'user-o', charge: false},
     ])
+    const navs = computed(() => {
+        if (useLoginRegistStore.isLogin) {
+            return navData.filter(nav => nav.name !== '注册' && nav.name !== '登陸')
+        }
+        return navData
+    })
 </script>
 
 <style>

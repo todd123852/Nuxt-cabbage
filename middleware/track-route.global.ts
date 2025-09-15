@@ -12,7 +12,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   // 记录路由历史记录
   const useNavigationStore = useNavigation();
-  console.log(useNavigationStore.history);
   // 如果后缀名不在所有页面哩，返回首页
   if (!pages.includes(toPath.split('/')[1])) {
     useNavigationStore.history = [];
@@ -39,8 +38,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     toIndex = eventPage.indexOf(toPath);
     fromIndex = eventPage.indexOf(fromPath);
   }
-  console.log('toIndex'+ toIndex);
-  console.log('fromIndex'+ fromIndex);
   if (fromPath === '/' || fromPath === toPath || fromIndex === -1 || toIndex === -1) {
     transitionName = 'slide-forward'; // 默认前进
   } else {

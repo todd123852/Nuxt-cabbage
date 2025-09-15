@@ -144,12 +144,12 @@ import avator1 from '~/components/imges/avators/avator1.png'
 <style scoped>
     .myInfo {
         width: 100%;
-        height: 91vh;
+        height: 100%;
         position: relative;
         background-color: var(--home_bg);
         background-size: 100% 35%;
         background-repeat: no-repeat;
-        padding: 0 1rem;
+        padding: 0 1rem 9vh 1rem;
     }
     section {
         height: 100%;

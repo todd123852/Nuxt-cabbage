@@ -101,7 +101,10 @@ definePageMeta({
     {text: '忘记密码', action: () => showToast({ message: '重新注册吧', icon: 'warning'})}
   ])
   async function submitLogin() {    
-    if (loginstore.checkAcc(account.value) && loginstore.checkPaw(password.value)) {
+    accountTouched.value = passwordTouched.value = true
+    if (loginstore.checkAcc(account.value).isLegal && loginstore.checkPaw(password.value).isLegal) {
+      console.log(loginstore.checkAcc(account.value));
+      
       isBtnLoading.value = true;
       const loginInfo = {
         username: account.value,
@@ -131,6 +134,8 @@ definePageMeta({
       } finally {
         isBtnLoading.value = false;
       }
+    } else {
+
     }
   }
 

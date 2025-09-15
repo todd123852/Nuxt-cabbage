@@ -67,22 +67,35 @@
           clearable
           label="￥"
           placeholder="最小50-最大1000"
+          type="number"
+          :min="1"
+          :max="1000"
+          step="0.01"
         />
       </div>
       <div class="chargeTips">温馨提醒: 充就充大的，别墅住大的</div>
-      <van-button type="primary" id="submitCharge">立即充值</van-button>
+      <van-button 
+      type="primary" 
+      @click="submitCharge"
+      text="立即充值" 
+      id="submitCharge" 
+      :loading="isBtnLoading"
+      />
       <!-- <van-loading id="charge-loading" size="4rem" /> -->
     </van-popup>
 </template>
 <script setup lang="ts">
     import { usePopup } from '@/stores/Popup';
+    import { useLobby } from '@/stores/Lobby';
+    const useLobbyStore = useLobby();
     const popupStore = usePopup();
     const activeTab = ref(0) // Tab高亮
     const activeBtn = ref(0) // 商户高亮
-    const amountInput = ref('') // 输入金额
+    const amountInput = ref<number | ''>('') // 输入金额
     const activeAmount = ref<number | null>(null) // 推荐金额高亮
-    const chargeTabOpition = popupStore.chargeData
-    // 选中的商户
+    const chargeTabOpition = popupStore.chargeData;
+    const isBtnLoading = ref<boolean>(false);
+  // 选中的商户
     const activeMerchant: any = computed(() => {
       const currentType = chargeTabOpition[activeTab.value];
       if (currentType && currentType.opition[activeBtn.value]) {
@@ -90,6 +103,31 @@
       }
       return {}; // 没有返回空
     });
+    async function submitCharge() {
+      if (Number(amountInput.value) >= 1) {
+        try {
+          isBtnLoading.value = true;
+          console.log(isBtnLoading.value);
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          useLobbyStore.amount += Number(amountInput.value);
+          showToast({
+            message: '充值成功',
+            icon: 'checked',
+          });
+          amountInput.value = '';
+        } catch (error) {
+          showToast({
+            message: '充值失敗',
+            icon: 'error',
+          });
+        } finally {
+          isBtnLoading.value = false
+        }
+      } else {
+        console.log(Number(amountInput.value));
+        
+      }
+    }
 
     // 点击改变商户
     function selectMerchant(typeIndex:number, merchantIndex:number) {
@@ -101,7 +139,7 @@
     // 点击推荐金额同步输入框
     function selectAmount(amount:number, amountIndex:number) {
       activeAmount.value = amountIndex;
-      amountInput.value = amount.toString()
+      amountInput.value = amount
     }
     // 当前推荐金额
     const currentRecommend = computed(() => {

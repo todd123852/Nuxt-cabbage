@@ -97,7 +97,8 @@ definePageMeta({
   ]
   // 注册逻辑
   async function submitRegist() {
-    if (registStore.checkAcc(account.value) && registStore.checkPaw(password.value)) {
+    accountTouched.value = passwordTouched.value = true
+    if (registStore.checkAcc(account.value).isLegal && registStore.checkPaw(password.value).isLegal) {
       isBtnLoading.value = true;
       const registInfo = {
         username: account.value,
@@ -113,9 +114,6 @@ definePageMeta({
         if (!res.ok) {
           throw new Error(data.message);
         }
-        // registStore.isLogin = true;
-        // registStore.username = account.value;
-        // registStore.userId = String(Math.floor(Math.random() * 1000000000) + 1000000000)
         // 成功回调
         registStore.loginSucess(account.value);
         showToast({
