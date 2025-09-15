@@ -144,7 +144,7 @@ import avator1 from '~/components/imges/avators/avator1.png'
 <style scoped>
     .myInfo {
         width: 100%;
-        height: 100vh;
+        height: 91vh;
         position: relative;
         background-color: var(--home_bg);
         background-size: 100% 35%;
@@ -161,7 +161,6 @@ import avator1 from '~/components/imges/avators/avator1.png'
         width: 100%;
         display: flex;
         flex-direction: column;
-        padding-top: 1.5rem;
     }
     .header-item {
         display: flex;
@@ -173,7 +172,7 @@ import avator1 from '~/components/imges/avators/avator1.png'
         position: absolute;
         font-size: 1.2rem;
         left: .5rem;
-        top: 3rem;
+        top: 1rem;
         margin: 0;
     }
     .header-item .van-icon {

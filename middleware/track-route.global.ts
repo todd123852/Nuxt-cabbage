@@ -12,9 +12,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   // 记录路由历史记录
   const useNavigationStore = useNavigation();
+  console.log(useNavigationStore.history);
   // 如果后缀名不在所有页面哩，返回首页
   if (!pages.includes(toPath.split('/')[1])) {
-    useNavigationStore.history.length = 0;
+    useNavigationStore.history = [];
     return navigateTo('/')
   }
 
@@ -22,19 +23,24 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const useloginRegistStore = useLoginRegist(); 
   if (to.path.includes('login') || to.path.includes('regist')) {
     if (useloginRegistStore.isLogin) {  
-      useNavigationStore.history.length = 0;
+      useNavigationStore.history = [];
       return navigateTo('/')
     }
   }
-  useNavigationStore.saveHistory(toPath);
+  if (!useNavigationStore.isBack) {    
+    useNavigationStore.saveHistory(toPath);
+  }
+  useNavigationStore.isBack = false;
   
-  let toIndex = layoutsArray.indexOf(toPath);
-  let fromIndex = layoutsArray.indexOf(fromPath);
+  let toIndex = pages.indexOf(toPath.split('/')[1]);
+  let fromIndex = pages.indexOf(fromPath.split('/')[1]);
   // 如果都是优惠页的情况
   if (eventPage.includes(toPath) && eventPage.includes(fromPath)) {
     toIndex = eventPage.indexOf(toPath);
     fromIndex = eventPage.indexOf(fromPath);
   }
+  console.log('toIndex'+ toIndex);
+  console.log('fromIndex'+ fromIndex);
   if (fromPath === '/' || fromPath === toPath || fromIndex === -1 || toIndex === -1) {
     transitionName = 'slide-forward'; // 默认前进
   } else {

@@ -7,7 +7,7 @@
           </NuxtLink>
         </header>
         <article>
-          <strong>🧧新人豪华大礼包 让您赢在起1111111111111111111跑线🧧</strong><br>
+          <strong>🧧新人豪华大礼包 让您赢在起跑线🧧</strong><br>
           <strong>🧧新人豪华大礼包 让您赢在起跑线🧧</strong><br>
           <strong>🧧新人豪华大礼包 让您赢在起跑线🧧</strong><br>
           <strong>🧧新人豪华大礼包 让您赢在起跑线🧧</strong><br>

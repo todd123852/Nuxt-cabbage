@@ -9,12 +9,12 @@
                 <div class="walletAmount">
                     <div class="amount">
                         当前余额: 
-                        <span  class="amountNumber">123</span>
+                        <span  class="amountNumber">{{ useLobbyStore.amount }}</span>
                     </div>
                     <button class="defaultBtn" @click="showRetrieveToast">一键找回</button>
                 </div>
                 <div class="tips">
-                    只能找回余额整数倍(即不含小数点)只能找回余额整数倍(即不含小数点)只能找回余额整数倍(即不含小数点)只能找回余额整数倍(即不含小数点)只能找回余额整数倍(即不含小数点)
+                    只能找回余额整数倍(即不含小数点)
                 </div>
             </div>
             <div class="platformContent">
@@ -69,6 +69,8 @@
 <script setup lang="ts">
 import { useGameInfo } from '~/stores/GameInfo'
 import { useNavigation } from '~/stores/Navigation';
+import { useLobby } from '~/stores/Lobby';
+const useLobbyStore = useLobby();
 const useNavigationStore = useNavigation();
 const gameInfoStore = useGameInfo();
 
@@ -109,7 +111,7 @@ const gameInfoStore = useGameInfo();
         color: var(--neutral_1)
     }
     .walletBody {
-        height: 94vh;
+        height: 93vh;
         display: flex;
         flex-direction: column;
         width: 100%;

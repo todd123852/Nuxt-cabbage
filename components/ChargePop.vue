@@ -231,4 +231,9 @@
     left: 0;
     bottom: 50%;
   }
+  @media (max-width: 770px) {
+    .van-popup, .van-overlay {
+      width: 100%;
+    }
+  }
 </style>

@@ -118,7 +118,7 @@
         text-align: start;
 
     }
-    @media (width < 770px){
+    @media (max-width: 769px){
         .sideOffice {
             display: none;
         }
