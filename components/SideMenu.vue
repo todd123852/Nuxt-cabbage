@@ -1,5 +1,5 @@
 <template>
-    <div class="sideOffice">
+    <div class="sideOffice" v-if="!isMobile">
         <input type="checkbox" id="sideMenu-switch">
         <div class="mainside">
             <!-- 放置侧边栏元素 -->
@@ -50,6 +50,12 @@
             themeStore.applyTheme(themeStore.themes[index].themeCss);
         }
     }
+    const isMobile = ref(false)
+
+    onMounted(() => {
+        isMobile.value = window.innerWidth <= 769
+    })
+
 </script>
 
 <style scoped>
