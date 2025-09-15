@@ -1,0 +1,1 @@
+import{u as t}from"./BFhLQQCx.js";import{d as n,z as r,C as a,aB as l,B as p,_ as c}from"#entry";const i=n({__name:"mine",setup(m){const o=t();return(s,e)=>(a(),r("div",{class:"mine-container",onScroll:e[0]||(e[0]=u=>p(o).displayAccountPopover=!1)},[l(s.$slots,"default",{},void 0,!0)],32))}}),f=c(i,[["__scopeId","data-v-227e652c"]]);export{f as default};
